@@ -596,17 +596,13 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       <section
         id="home"
-        className="relative min-h-[100svh] lg:min-h-[calc(100vh-48px)] flex items-center justify-center px-6 md:px-12 lg:px-20 pt-16 pb-8 lg:pt-12 lg:pb-6 z-10 overflow-hidden"
+        className="relative min-h-[100svh] flex items-center justify-center z-10 overflow-hidden"
       >
-        {/* ── Soft radial glow behind heading area ── */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-pink-200/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-pink-100/15 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-
+        <div className="max-w-[1536px] mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 lg:pl-12 lg:pr-6">
+          
           {/* ═══════ LEFT COLUMN — Content ═══════ */}
-          <div className="flex-1 text-center lg:text-left max-w-xl lg:max-w-lg z-10 order-2 lg:order-1 mt-4 lg:mt-0">
-
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20 order-2 lg:order-1 w-full lg:w-[42%] lg:pl-10">
+            
             {/* Subtitle label */}
             <motion.p
               initial={{ opacity: 0, y: -20 }}
@@ -622,7 +618,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.7, duration: 0.8, type: 'spring' }}
-              className="text-5xl sm:text-6xl md:text-[4rem] lg:text-[4.2rem] xl:text-[5rem] font-serif font-bold leading-[1.05] text-pink-800 hero-heading-glow tracking-tight"
+              className="text-5xl sm:text-6xl md:text-[4.5rem] lg:text-[5rem] xl:text-[5.5rem] font-serif font-bold leading-[1.05] text-pink-800 hero-heading-glow tracking-tight whitespace-nowrap"
             >
               Happy Birthday
             </motion.h1>
@@ -632,10 +628,10 @@ export default function App() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6 }}
-              className="mt-2 md:mt-3 flex items-center gap-3 md:gap-4 justify-center lg:justify-start"
+              className="mt-2 md:mt-4 flex items-center gap-3 md:gap-4 justify-center lg:justify-start"
             >
               <span className="text-xl md:text-2xl opacity-90 drop-shadow-sm">🌸</span>
-              <p className="text-2xl md:text-3xl lg:text-4xl font-cursive text-pink-600 drop-shadow-sm">
+              <p className="text-2xl md:text-3xl lg:text-[40px] font-cursive text-pink-600 drop-shadow-sm leading-none">
                 My Beautiful Love
               </p>
               <span className="text-xl md:text-2xl opacity-90 drop-shadow-sm">🌸</span>
@@ -646,7 +642,7 @@ export default function App() {
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 1, scaleX: 1 }}
               transition={{ delay: 1.2, duration: 0.8 }}
-              className="champagne-divider w-40 md:w-48 mx-auto lg:mx-0 mt-3 md:mt-4"
+              className="champagne-divider w-40 md:w-56 mx-auto lg:mx-0 mt-4 md:mt-6"
             />
 
             {/* Paragraph */}
@@ -654,7 +650,7 @@ export default function App() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.3, duration: 0.6 }}
-              className="mt-3 md:mt-4 text-pink-700/70 font-sans text-sm md:text-base leading-relaxed font-light max-w-[380px] mx-auto lg:mx-0"
+              className="mt-4 md:mt-6 text-pink-700/70 font-sans text-sm md:text-base xl:text-lg leading-relaxed font-light max-w-[420px] mx-auto lg:mx-0"
             >
               You are the most extraordinary soul I've ever known. Today, the entire universe celebrates the beautiful miracle that is you.
             </motion.p>
@@ -664,7 +660,7 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5 }}
-              className="mt-2 md:mt-3 h-6 md:h-8 flex items-center justify-center lg:justify-start"
+              className="mt-2 md:mt-4 h-6 md:h-8 flex items-center justify-center lg:justify-start"
             >
               <TypeAnimation
                 sequence={[
@@ -675,7 +671,7 @@ export default function App() {
                 wrapper="span"
                 speed={45}
                 repeat={Infinity}
-                className="text-pink-700/80 font-sans text-sm md:text-base italic font-light"
+                className="text-pink-700/80 font-sans text-sm md:text-base xl:text-lg italic font-light"
               />
             </motion.div>
 
@@ -687,7 +683,7 @@ export default function App() {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowModal(true)}
-              className="hero-btn-shine relative mt-4 md:mt-6 px-8 md:px-10 py-3 md:py-3.5 rounded-full bg-gradient-to-r from-pink-500 via-pink-500 to-rose-500 text-white font-sans text-xs md:text-sm font-bold tracking-widest uppercase shadow-lg shadow-pink-300/40 cursor-pointer transition-all flex items-center gap-2 md:gap-3 mx-auto lg:mx-0 overflow-hidden"
+              className="hero-btn-shine relative mt-6 md:mt-8 lg:mt-10 px-8 md:px-10 py-3 md:py-4 rounded-full bg-gradient-to-r from-pink-500 via-pink-500 to-rose-500 text-white font-sans text-xs md:text-sm font-bold tracking-widest uppercase shadow-lg shadow-pink-300/40 cursor-pointer transition-all flex items-center gap-2 md:gap-3 mx-auto lg:mx-0 overflow-hidden"
               style={{
                 boxShadow: '0 4px 20px rgba(233, 30, 99, 0.3), 0 8px 40px rgba(233, 30, 99, 0.15), inset 0 1px 0 rgba(255,255,255,0.2)'
               }}
@@ -701,9 +697,9 @@ export default function App() {
           {/* ═══════ RIGHT COLUMN — Hero Image ═══════ */}
           <motion.div
             initial={{ opacity: 0, x: 60, rotate: 3 }}
-            animate={{ opacity: 1, x: 0, rotate: 2 }}
+            animate={{ opacity: 1, x: 0, rotate: 1.5 }}
             transition={{ delay: 0.8, duration: 1, type: 'spring', bounce: 0.2 }}
-            className="flex-1 relative z-10 order-1 lg:order-2 max-w-[260px] sm:max-w-xs lg:max-w-[340px] xl:max-w-[380px] w-full"
+            className="flex-1 relative z-10 order-1 lg:order-2 w-full lg:w-[58%] h-[60vh] lg:h-[75vh] flex items-center justify-center lg:justify-end xl:pr-10"
           >
             {/* Ambient glow behind image */}
             <div className="absolute -inset-8 bg-gradient-to-br from-pink-200/40 via-pink-300/30 to-rose-200/40 rounded-[60px] blur-[40px] ambient-glow pointer-events-none" />
