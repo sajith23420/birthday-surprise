@@ -278,7 +278,7 @@ function AudioPlayer() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1 }}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-3"
+      className="fixed bottom-8 right-8 lg:bottom-10 lg:right-10 z-50 flex items-center gap-3"
     >
       <audio ref={audioRef} src="/song.mp3" loop />
 
@@ -342,34 +342,46 @@ function FadeSection({ children, className = '', id = '' }) {
 /* ═══════════════════════════════════════════════════════════════════════ */
 /*  8. ORBITING IMAGE                                                    */
 /* ═══════════════════════════════════════════════════════════════════════ */
-function OrbitImage({ src, radius, startAngle, duration }) {
+function OrbitImage({ src, radius, startAngle, duration, label }) {
   return (
     <motion.div
       className="absolute"
       style={{
-        width: 80,
-        height: 80,
+        width: 72,
+        height: 72,
         top: '50%',
         left: '50%',
-        marginTop: -40,
-        marginLeft: -40,
+        marginTop: -36,
+        marginLeft: -36,
       }}
       animate={{ rotate: 360 }}
       transition={{ repeat: Infinity, duration, ease: 'linear' }}
     >
       <div
+        className="relative flex items-center justify-center w-full h-full"
         style={{
           transform: `rotate(${startAngle}deg) translateX(${radius}px)`,
-          transformOrigin: '40px 40px',
+          transformOrigin: '36px 36px',
         }}
       >
-        <motion.img
-          src={src}
-          alt="Memory"
-          className="w-20 h-20 rounded-full border-4 border-white shadow-xl shadow-pink-200/50 object-cover"
+        <motion.div
           animate={{ rotate: -360 }}
           transition={{ repeat: Infinity, duration, ease: 'linear' }}
-        />
+          className="relative w-full h-full"
+        >
+          <img
+            src={src}
+            alt="Memory"
+            className="w-full h-full rounded-full border-[3px] border-white/90 shadow-[0_10px_30px_rgba(233,30,99,0.15)] object-cover overflow-hidden"
+          />
+          {label && (
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-max max-w-[80px] text-center">
+              <div className="bg-white/75 backdrop-blur-md px-2.5 py-1 rounded-full shadow-[0_4px_15px_rgba(255,110,170,0.15)] border border-white/80">
+                <span className="text-[8px] md:text-[9px] font-sans font-semibold text-pink-700/90 uppercase tracking-widest">{label}</span>
+              </div>
+            </div>
+          )}
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -639,17 +651,17 @@ export default function App() {
         {/* Soft radial glows and background lighting */}
         <div className="absolute top-1/2 left-[10%] w-[500px] h-[500px] bg-pink-300/15 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
         <div className="absolute top-1/2 right-[10%] w-[500px] h-[500px] bg-rose-300/15 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
-        
+
         {/* Decorative Glass Orbs */}
-        <div className="absolute top-[15%] left-[5%] w-32 h-32 journey-glass-orb opacity-40 animate-pulse" style={{animationDuration: '4s'}} />
-        <div className="absolute bottom-[10%] right-[8%] w-20 h-20 journey-glass-orb opacity-50 animate-pulse" style={{animationDuration: '5s', animationDelay: '1s'}} />
+        <div className="absolute top-[15%] left-[5%] w-32 h-32 journey-glass-orb opacity-40 animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[10%] right-[8%] w-20 h-20 journey-glass-orb opacity-50 animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
 
         {/* Tiny Light Particles */}
-        <div className="absolute top-[25%] right-[20%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_12px_rgba(255,255,255,1)] animate-ping" style={{animationDuration: '3s'}} />
-        <div className="absolute bottom-[35%] left-[15%] w-2 h-2 bg-pink-100 rounded-full shadow-[0_0_15px_rgba(255,182,193,1)] animate-ping" style={{animationDuration: '4.5s', animationDelay: '2s'}} />
+        <div className="absolute top-[25%] right-[20%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_12px_rgba(255,255,255,1)] animate-ping" style={{ animationDuration: '3s' }} />
+        <div className="absolute bottom-[35%] left-[15%] w-2 h-2 bg-pink-100 rounded-full shadow-[0_0_15px_rgba(255,182,193,1)] animate-ping" style={{ animationDuration: '4.5s', animationDelay: '2s' }} />
 
         <div className="text-center mb-20 md:mb-28 relative z-10">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -658,7 +670,7 @@ export default function App() {
           >
             Two Souls, One Journey
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -670,7 +682,7 @@ export default function App() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:gap-6 relative max-w-5xl mx-auto min-h-[500px] sm:min-h-[450px]">
-          
+
           {/* Elegant Connecting Lines (desktop only) */}
           <div className="hidden sm:block absolute top-1/2 left-[15%] right-[15%] border-t border-dashed border-pink-300/40 z-0 -translate-y-1/2" />
           <div className="hidden sm:block absolute top-1/2 left-[25%] right-[25%] border-t border-solid border-pink-200/30 z-0 -translate-y-1/2 translate-y-1.5" />
@@ -687,7 +699,7 @@ export default function App() {
             <div className="journey-image-frame w-56 sm:w-64 md:w-72 aspect-[4/5]">
               <img src="/3.png" alt="Soul 1" className="w-full h-full object-cover" />
             </div>
-            
+
             {/* Floating Badge */}
             <div className="absolute -bottom-3 -left-3 journey-badge journey-badge-float" style={{ animationDelay: '0.2s' }}>
               <span className="text-xs md:text-sm font-sans font-medium text-pink-700 flex items-center gap-1.5">
@@ -695,9 +707,9 @@ export default function App() {
                 Her Smile
               </span>
             </div>
-            
+
             {/* Sparkles */}
-            <div className="absolute -top-4 -left-4 text-gold-400 text-xl twinkle-star" style={{color: '#F6C56B'}}>✦</div>
+            <div className="absolute -top-4 -left-4 text-gold-400 text-xl twinkle-star" style={{ color: '#F6C56B' }}>✦</div>
           </motion.div>
 
           {/* Center Image (/4.png) replacing beating heart */}
@@ -709,10 +721,10 @@ export default function App() {
             className="z-30 relative sm:absolute sm:left-1/2 sm:-translate-x-1/2 sm:top-1/2 sm:-translate-y-1/2 order-2 my-8 sm:my-0"
           >
             <div className="absolute -inset-10 bg-gradient-to-r from-pink-200/30 to-rose-200/30 blur-[40px] rounded-full pointer-events-none pulse-glow" />
-            
+
             <div className="journey-image-frame journey-center-frame w-64 sm:w-72 md:w-80 aspect-[4/5] sm:aspect-square md:aspect-[4/5] rounded-[2.5rem]">
               <img src="/4.png" alt="Together" className="w-full h-full object-cover" />
-              
+
               {/* Preserved Beating Heart Animation as an elegant overlay */}
               <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-14 md:h-14 bg-white/70 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(233,30,99,0.2)] border border-white/80">
                 <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 1.2 }}>
@@ -722,8 +734,8 @@ export default function App() {
             </div>
 
             {/* Sparkles */}
-            <div className="absolute -top-6 right-8 text-gold-400 text-2xl twinkle-star" style={{color: '#F6C56B'}}>✦</div>
-            <div className="absolute bottom-8 -left-5 text-pink-300 text-base twinkle-star" style={{animationDelay: '1s'}}>✦</div>
+            <div className="absolute -top-6 right-8 text-gold-400 text-2xl twinkle-star" style={{ color: '#F6C56B' }}>✦</div>
+            <div className="absolute bottom-8 -left-5 text-pink-300 text-base twinkle-star" style={{ animationDelay: '1s' }}>✦</div>
           </motion.div>
 
           {/* Image 2 (/7.png) */}
@@ -748,7 +760,7 @@ export default function App() {
             </div>
 
             {/* Sparkles */}
-            <div className="absolute -bottom-5 right-6 text-gold-400 text-xl twinkle-star" style={{color: '#F6C56B'}}>✦</div>
+            <div className="absolute -bottom-5 right-6 text-gold-400 text-xl twinkle-star" style={{ color: '#F6C56B' }}>✦</div>
           </motion.div>
         </div>
       </FadeSection>
@@ -756,37 +768,85 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  OUR UNIVERSE (ORBITING)                                       */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="universe" className="relative z-10 py-24 md:py-32 px-6 overflow-hidden">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-pink-800 text-center mb-2 drop-shadow-sm">
-          Our Universe
-        </h2>
-        <p className="text-pink-500 font-cursive text-2xl md:text-3xl text-center mb-20 drop-shadow-sm">
-          You are at the center of every beautiful memory
-        </p>
+      <FadeSection id="universe" className="relative z-10 min-h-[100svh] lg:min-h-[100vh] flex flex-col justify-center py-16 lg:py-0 px-6 overflow-hidden">
+        <div className="flex flex-col items-center justify-center max-w-7xl mx-auto w-full relative">
 
-        <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] mx-auto mt-8 mb-8">
-          {/* Center image */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+          {/* Header Area */}
+          <div className="text-center z-10 relative">
+            <h2 className="text-4xl md:text-5xl lg:text-[4rem] font-serif font-bold text-pink-800 tracking-tight mb-2 md:mb-3 drop-shadow-sm">
+              Our Universe
+            </h2>
+            <p className="text-pink-500 font-cursive text-2xl md:text-3xl mb-4 md:mb-5 drop-shadow-sm">
+              You are at the center of every beautiful memory
+            </p>
+            <motion.div className="champagne-divider w-32 md:w-40 mx-auto mb-6 md:mb-10" />
+          </div>
+
+          {/* Complete Orbit System container */}
+          <div className="relative w-full flex items-center justify-center">
+
+            {/* Left Side Quote Card (Desktop Only) */}
             <motion.div
-              className="pulse-glow rounded-full"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ repeat: Infinity, duration: 4 }}
+              initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+              className="hidden lg:block absolute left-4 xl:left-12 top-1/2 -translate-y-1/2 w-64 bg-white/60 backdrop-blur-xl p-6 rounded-3xl border border-white/80 shadow-[0_15px_40px_rgba(255,110,170,0.12)]"
             >
-              <img
-                src="/2.jpg"
-                alt="Center of my universe"
-                className="w-36 h-36 md:w-48 md:h-48 rounded-full border-[6px] border-white shadow-xl shadow-pink-300/40 object-cover"
-              />
+              <Quote size={20} className="text-pink-400 mb-3" />
+              <p className="text-pink-700/80 font-serif italic text-lg leading-relaxed">
+                "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
+              </p>
+            </motion.div>
+
+            {/* Orbit */}
+            <div className="relative w-[280px] h-[280px] md:w-[380px] md:h-[380px]">
+              {/* Center image - reduced slightly (w-48 -> w-[170px]) */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                <motion.div
+                  className="pulse-glow rounded-full"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ repeat: Infinity, duration: 4 }}
+                >
+                  <img
+                    src="/5.png"
+                    alt="Center of my universe"
+                    className="w-[120px] h-[120px] md:w-[170px] md:h-[170px] rounded-full border-[6px] border-white/95 shadow-[0_20px_50px_rgba(233,30,99,0.4)] object-cover overflow-hidden bg-white/20 backdrop-blur-sm"
+                  />
+                </motion.div>
+              </div>
+
+              {/* Reduced radius by ~9% (160 -> 145) */}
+              <OrbitImage src="/6.png" radius={145} startAngle={225} duration={22} label="Adventure" />
+              <OrbitImage src="/3.png" radius={145} startAngle={315} duration={22} label="Laughter" />
+              <OrbitImage src="/7.png" radius={145} startAngle={45} duration={22} label="Romance" />
+              <OrbitImage src="/8.png" radius={145} startAngle={90} duration={22} label="Joy" />
+              <OrbitImage src="/5.png" radius={145} startAngle={135} duration={22} label="Forever" />
+
+              {/* Delicate concentric rings */}
+              <div className="absolute inset-1 md:inset-3 rounded-full border border-dashed border-pink-200/40" />
+              <div className="absolute inset-10 md:inset-[3.25rem] rounded-full border border-solid border-pink-100/30" />
+            </div>
+
+            {/* Right Side Quote Card (Desktop Only) */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+              className="hidden lg:block absolute right-4 xl:right-12 top-1/2 -translate-y-1/2 w-64 bg-white/60 backdrop-blur-xl p-6 rounded-3xl border border-white/80 shadow-[0_15px_40px_rgba(255,110,170,0.12)]"
+            >
+              <Quote size={20} className="text-pink-400 mb-3" />
+              <p className="text-pink-700/80 font-serif italic text-lg leading-relaxed">
+                "You are my sun, my moon, and all of my stars. With you, every single moment feels like magic."
+              </p>
             </motion.div>
           </div>
 
-          <OrbitImage src="/7.jpg" radius={160} startAngle={0} duration={20} />
-          <OrbitImage src="/8.jpg" radius={160} startAngle={90} duration={20} />
-          <OrbitImage src="/9.jpg" radius={160} startAngle={180} duration={20} />
-          <OrbitImage src="/10.jpg" radius={160} startAngle={270} duration={20} />
+          {/* Bottom Quote */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+            className="mt-8 md:mt-12 text-center relative z-10"
+          >
+            <p className="text-pink-600/80 font-sans font-medium tracking-[0.2em] uppercase text-xs md:text-sm">
+              My Whole World Revolves Around You
+            </p>
+          </motion.div>
 
-          <div className="absolute inset-2 md:inset-4 rounded-full border-2 border-dashed border-pink-200/50" />
-          <div className="absolute inset-10 md:inset-14 rounded-full border border-dashed border-pink-100/40" />
         </div>
       </FadeSection>
 
