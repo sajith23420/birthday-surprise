@@ -596,13 +596,13 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       <section
         id="home"
-        className="relative min-h-[100svh] flex items-center justify-center z-10 overflow-hidden"
+        className="relative h-[calc(100svh-44px)] min-h-[600px] flex items-center justify-center z-10 overflow-hidden"
       >
         <div className="max-w-[1536px] mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 lg:pl-12 lg:pr-6">
-          
+
           {/* ═══════ LEFT COLUMN — Content ═══════ */}
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20 order-2 lg:order-1 w-full lg:w-[42%] lg:pl-10">
-            
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20 order-2 lg:order-1 w-full lg:w-[42%] lg:pl-[140px]">
+
             {/* Subtitle label */}
             <motion.p
               initial={{ opacity: 0, y: -20 }}
@@ -697,19 +697,23 @@ export default function App() {
           {/* ═══════ RIGHT COLUMN — Hero Image ═══════ */}
           <motion.div
             initial={{ opacity: 0, x: 60, rotate: 3 }}
-            animate={{ opacity: 1, x: 0, rotate: 1.5 }}
+            animate={{ opacity: 1, x: 0, rotate: 4 }}
             transition={{ delay: 0.8, duration: 1, type: 'spring', bounce: 0.2 }}
-            className="flex-1 relative z-10 order-1 lg:order-2 w-full lg:w-[58%] h-[60vh] lg:h-[75vh] flex items-center justify-center lg:justify-end xl:pr-10"
+            className="flex-1 relative z-10 order-1 lg:order-2 w-full lg:w-[47%] lg:max-w-[500px] lg:h-[650px] aspect-[450/670] max-h-[75vh] flex items-center justify-center lg:justify-end xl:pr-12 lg:ml-10"
           >
             {/* Ambient glow behind image */}
-            <div className="absolute -inset-8 bg-gradient-to-br from-pink-200/40 via-pink-300/30 to-rose-200/40 rounded-[60px] blur-[40px] ambient-glow pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-gradient-to-br from-pink-200/50 via-pink-300/40 to-rose-200/50 rounded-[60px] blur-[50px] ambient-glow pointer-events-none z-0" />
 
             {/* Glass frame with image */}
-            <div className="relative hero-glass-frame hero-image-reflection">
+            <div className="relative z-10 w-full h-full rounded-[32px] border-[4px] border-white/90 shadow-[0_20px_60px_rgba(255,100,150,0.3),inset_0_0_20px_rgba(255,255,255,0.8)] overflow-hidden bg-pink-50/50 backdrop-blur-sm group rotate-[4deg] hover:rotate-0 transition-transform duration-700">
+              {/* Glass Highlight */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/40 to-transparent opacity-60 z-20 pointer-events-none" />
+
               <img
                 src="/1.png"
                 alt="Birthday Girl"
-                className="w-full aspect-[3/4] object-cover rounded-[33px]"
+                className="w-full h-full object-cover"
+                style={{ objectPosition: 'center 20%' }}
               />
             </div>
 
@@ -718,34 +722,34 @@ export default function App() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.5, duration: 0.6 }}
-              className="absolute -left-4 md:-left-8 top-[15%] floating-label-glass rounded-full px-4 py-2 md:px-5 md:py-2.5 cursor-default"
+              className="absolute -left-4 lg:-left-12 top-[15%] lg:top-[20%] floating-label-glass rounded-full px-5 py-2.5 cursor-default z-30 shadow-[0_10px_30px_rgba(255,100,150,0.2)] border border-white/60 bg-white/70 backdrop-blur-md"
             >
-              <span className="text-xs md:text-sm font-sans font-medium text-pink-700/90 tracking-wide">❤️ Forever</span>
+              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">❤️ Forever</span>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.8, duration: 0.6 }}
-              className="absolute -right-4 md:-right-6 top-[45%] floating-label-glass rounded-full px-4 py-2 md:px-5 md:py-2.5 cursor-default"
+              className="absolute -right-6 lg:-right-12 top-[45%] lg:top-[50%] floating-label-glass rounded-full px-5 py-2.5 cursor-default z-30 shadow-[0_10px_30px_rgba(255,100,150,0.2)] border border-white/60 bg-white/70 backdrop-blur-md"
             >
-              <span className="text-xs md:text-sm font-sans font-medium text-pink-700/90 tracking-wide">🌸 Birthday Girl</span>
+              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">🌸 Birthday Girl</span>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 2.1, duration: 0.6 }}
-              className="absolute -left-2 md:-left-4 bottom-[12%] floating-label-glass rounded-full px-4 py-2 md:px-5 md:py-2.5 cursor-default"
+              className="absolute -left-2 lg:-left-6 bottom-[10%] lg:bottom-[15%] floating-label-glass rounded-full px-5 py-2.5 cursor-default z-30 shadow-[0_10px_30px_rgba(255,100,150,0.2)] border border-white/60 bg-white/70 backdrop-blur-md"
             >
-              <span className="text-xs md:text-sm font-sans font-medium text-pink-700/90 tracking-wide">⭐ My Universe</span>
+              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">⭐ My Universe</span>
             </motion.div>
 
             {/* ── Decorative sparkle stars ── */}
-            <div className="absolute -top-4 -right-4 text-amber-400/60 text-lg twinkle-star" style={{ animationDelay: '0s' }}>✦</div>
-            <div className="absolute top-[25%] -right-8 text-pink-300/50 text-sm twinkle-star" style={{ animationDelay: '0.8s' }}>✦</div>
-            <div className="absolute -bottom-2 right-[20%] text-amber-400/50 text-base twinkle-star" style={{ animationDelay: '1.5s' }}>✦</div>
-            <div className="absolute top-[10%] -left-6 text-pink-300/40 text-xs twinkle-star" style={{ animationDelay: '2s' }}>✦</div>
+            <div className="absolute -top-6 left-1/4 text-amber-400/60 text-2xl twinkle-star z-20" style={{ animationDelay: '0s' }}>✦</div>
+            <div className="absolute top-[30%] -right-8 text-pink-300/60 text-xl twinkle-star z-20" style={{ animationDelay: '0.8s' }}>✦</div>
+            <div className="absolute -bottom-8 right-[30%] text-amber-400/60 text-2xl twinkle-star z-20" style={{ animationDelay: '1.5s' }}>✦</div>
+            <div className="absolute bottom-[25%] -left-10 text-pink-300/50 text-xl twinkle-star z-20" style={{ animationDelay: '2s' }}>✦</div>
           </motion.div>
         </div>
 
@@ -1332,7 +1336,7 @@ export default function App() {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
         `}</style>
-        
+
         {/* Background Decorations */}
         <div className="absolute inset-0 pointer-events-none z-0">
           {/* Subtle SVG Stars */}
@@ -1382,7 +1386,7 @@ export default function App() {
 
           {/* Main Layout */}
           <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-12 xl:gap-20">
-            
+
             {/* LEFT CARDS */}
             <div className="flex flex-col gap-6 lg:gap-8 w-full max-w-sm order-2 lg:order-1 z-20">
               <WhyYouCard
@@ -1407,7 +1411,7 @@ export default function App() {
               transition={{ duration: 1 }}
               className="relative order-1 lg:order-2 z-10 flex-shrink-0 my-4 lg:my-0"
             >
-              <motion.div 
+              <motion.div
                 animate={{ y: [-8, 8, -8] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
                 className="relative"
@@ -1416,12 +1420,12 @@ export default function App() {
                 <div className="absolute inset-0 rounded-full border-[1px] border-pink-400/30 scale-[1.15]" />
                 <div className="absolute inset-0 rounded-full border-[1px] border-pink-300/20 scale-[1.3]" />
                 <div className="absolute inset-0 rounded-full border-[1px] border-pink-200/10 scale-[1.45]" />
-                
+
                 {/* Portrait */}
                 <div className="w-56 h-56 md:w-64 md:h-64 rounded-full border-[6px] border-white shadow-[0_0_50px_rgba(255,100,150,0.5)] overflow-hidden bg-pink-100 relative z-20">
                   <img src="/3.png" className="w-full h-full object-cover" />
                 </div>
-                
+
                 {/* Flowers overlapping frame */}
                 <div className="absolute -bottom-2 -left-2 text-4xl drop-shadow-lg z-30 -rotate-12">🌸</div>
                 <div className="absolute top-4 -right-4 text-3xl drop-shadow-lg z-30 rotate-12">🌺</div>
