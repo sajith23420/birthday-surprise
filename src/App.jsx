@@ -272,14 +272,25 @@ function AudioPlayer() {
     if (!audioRef.current) return;
     audioRef.current.muted = isMuted;
 
+    const events = ['pointerdown', 'click', 'touchstart', 'keydown', 'wheel'];
+    
+    const handleInteraction = async () => {
+      events.forEach(e => window.removeEventListener(e, handleInteraction));
+      if (audioRef.current) {
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+        } catch (e) {}
+      }
+    };
+
     const attemptPlay = async () => {
       try {
         await audioRef.current.play();
         setIsPlaying(true);
-        localStorage.setItem('musicPlaying', 'true');
       } catch (err) {
         setIsPlaying(false);
-        localStorage.setItem('musicPlaying', 'false');
+        events.forEach(e => window.addEventListener(e, handleInteraction, { once: true }));
       }
     };
 
@@ -289,6 +300,10 @@ function AudioPlayer() {
     } else {
       setIsPlaying(false);
     }
+
+    return () => {
+      events.forEach(e => window.removeEventListener(e, handleInteraction));
+    };
   }, []);
 
   useEffect(() => {
