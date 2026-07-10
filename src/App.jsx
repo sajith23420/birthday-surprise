@@ -4,7 +4,7 @@ import confetti from 'canvas-confetti';
 import { TypeAnimation } from 'react-type-animation';
 import {
   Heart, Sparkles, Pause, Play,
-  X, Gift, Smile, Flame, Crown, Quote, Flower2
+  X, Gift, Smile, Flame, Crown, Quote, Flower2, Volume2, VolumeX
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════════════ */
@@ -260,17 +260,59 @@ function InfiniteMarquee() {
 /*  6. AUDIO PLAYER (Bottom Right Sticky)                                */
 /* ═══════════════════════════════════════════════════════════════════════ */
 function AudioPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    return localStorage.getItem('musicPlaying') === 'true';
+  });
+  const [isMuted, setIsMuted] = useState(() => {
+    return localStorage.getItem('musicMuted') === 'true';
+  });
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = isMuted;
+
+    const attemptPlay = async () => {
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        localStorage.setItem('musicPlaying', 'true');
+      } catch (err) {
+        setIsPlaying(false);
+        localStorage.setItem('musicPlaying', 'false');
+      }
+    };
+
+    const storedState = localStorage.getItem('musicPlaying');
+    if (storedState !== 'false') {
+      attemptPlay();
+    } else {
+      setIsPlaying(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+    localStorage.setItem('musicMuted', isMuted);
+  }, [isMuted]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
+      localStorage.setItem('musicPlaying', 'false');
     } else {
-      audioRef.current.play().catch(() => { });
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
+      localStorage.setItem('musicPlaying', 'true');
     }
-    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
   };
 
   return (
@@ -280,7 +322,7 @@ function AudioPlayer() {
       transition={{ delay: 1 }}
       className="fixed bottom-8 right-8 lg:bottom-10 lg:right-10 z-50 flex items-center gap-3"
     >
-      <audio ref={audioRef} src="/song.mp3" loop />
+      <audio ref={audioRef} src="/Our_Song (1).mp3" loop preload="auto" playsInline />
 
       <div className="bg-white/90 backdrop-blur-md rounded-full px-5 py-3 shadow-lg shadow-pink-200/50 border border-pink-100 flex items-center gap-4">
         <div className="flex items-end gap-[3px] h-4 w-6 justify-center">
@@ -298,21 +340,35 @@ function AudioPlayer() {
         <span className="text-[10px] font-bold tracking-[0.2em] text-pink-500 font-sans uppercase w-16">
           {isPlaying ? 'PLAYING' : 'SILENT'}
         </span>
-        <motion.button
-          onClick={togglePlay}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md cursor-pointer transition-all duration-300 ${isPlaying
-            ? 'bg-pink-500 text-white shadow-pink-300/50'
-            : 'bg-pink-50 border border-pink-200 text-pink-500 hover:bg-pink-100'
-            }`}
-        >
-          {isPlaying ? (
-            <Pause size={14} className="fill-white" />
-          ) : (
-            <Play size={14} className="fill-pink-500 ml-0.5" />
-          )}
-        </motion.button>
+        <div className="flex items-center gap-2">
+          <motion.button
+            onClick={toggleMute}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md cursor-pointer transition-all duration-300 ${isMuted
+              ? 'bg-pink-50 border border-pink-200 text-pink-500 hover:bg-pink-100'
+              : 'bg-pink-500 text-white shadow-pink-300/50'
+              }`}
+          >
+            {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          </motion.button>
+          
+          <motion.button
+            onClick={togglePlay}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md cursor-pointer transition-all duration-300 ${isPlaying
+              ? 'bg-pink-500 text-white shadow-pink-300/50'
+              : 'bg-pink-50 border border-pink-200 text-pink-500 hover:bg-pink-100'
+              }`}
+          >
+            {isPlaying ? (
+              <Pause size={14} className="fill-white" />
+            ) : (
+              <Play size={14} className="fill-pink-500 ml-0.5" />
+            )}
+          </motion.button>
+        </div>
       </div>
     </motion.div>
   );
