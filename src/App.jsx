@@ -601,7 +601,7 @@ export default function App() {
         <div className="max-w-[1536px] mx-auto w-full h-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 lg:pl-12 lg:pr-6">
 
           {/* ═══════ LEFT COLUMN — Content ═══════ */}
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20 order-2 lg:order-1 w-full lg:w-[42%] lg:pl-[140px]">
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20 order-2 lg:order-1 w-full lg:w-[62%] lg:pl-[140px]">
 
             {/* Subtitle label */}
             <motion.p
@@ -696,16 +696,16 @@ export default function App() {
 
           {/* ═══════ RIGHT COLUMN — Hero Image ═══════ */}
           <motion.div
-            initial={{ opacity: 0, x: 60, rotate: 3 }}
+            initial={{ opacity: 0, x: 60, rotate: 2 }}
             animate={{ opacity: 1, x: 0, rotate: 4 }}
-            transition={{ delay: 0.8, duration: 1, type: 'spring', bounce: 0.2 }}
-            className="flex-1 relative z-10 order-1 lg:order-2 w-full lg:w-[47%] lg:max-w-[500px] lg:h-[650px] aspect-[450/670] max-h-[75vh] flex items-center justify-center lg:justify-end xl:pr-12 lg:ml-10"
+            transition={{ delay: 0.8, duration: 1, type: 'spring', bounce: 0.1 }}
+            className="flex-1 relative z-10 order-1 lg:order-2 w-full lg:w-[67%] lg:max-w-[500px] lg:h-[650px] aspect-[450/670] max-h-[75vh] flex items-center justify-center lg:justify-end xl:pr-12 lg:ml-10"
           >
             {/* Ambient glow behind image */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] bg-gradient-to-br from-pink-200/50 via-pink-300/40 to-rose-200/50 rounded-[60px] blur-[50px] ambient-glow pointer-events-none z-0" />
 
             {/* Glass frame with image */}
-            <div className="relative z-10 w-full h-full rounded-[32px] border-[4px] border-white/90 shadow-[0_20px_60px_rgba(255,100,150,0.3),inset_0_0_20px_rgba(255,255,255,0.8)] overflow-hidden bg-pink-50/50 backdrop-blur-sm group rotate-[4deg] hover:rotate-0 transition-transform duration-700">
+            <div className="relative z-10 w-full h-full rounded-[22px] border-[4px] border-white/90 shadow-[0_20px_60px_rgba(255,100,150,0.3),inset_0_0_20px_rgba(255,255,255,0.8)] overflow-hidden bg-pink-50/50 backdrop-blur-sm group rotate-[2deg] hover:rotate-0 transition-transform duration-700">
               {/* Glass Highlight */}
               <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-white/40 to-transparent opacity-60 z-20 pointer-events-none" />
 
@@ -733,7 +733,7 @@ export default function App() {
               transition={{ delay: 1.8, duration: 0.6 }}
               className="absolute -right-6 lg:-right-12 top-[45%] lg:top-[50%] floating-label-glass rounded-full px-5 py-2.5 cursor-default z-30 shadow-[0_10px_30px_rgba(255,100,150,0.2)] border border-white/60 bg-white/70 backdrop-blur-md"
             >
-              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">🌸 Birthday Girl</span>
+              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">⭐ My Universe</span>
             </motion.div>
 
             <motion.div
@@ -742,7 +742,7 @@ export default function App() {
               transition={{ delay: 2.1, duration: 0.6 }}
               className="absolute -left-2 lg:-left-6 bottom-[10%] lg:bottom-[15%] floating-label-glass rounded-full px-5 py-2.5 cursor-default z-30 shadow-[0_10px_30px_rgba(255,100,150,0.2)] border border-white/60 bg-white/70 backdrop-blur-md"
             >
-              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">⭐ My Universe</span>
+              <span className="text-sm font-sans font-semibold text-pink-800 tracking-wide">🌸 Birthday Girl</span>
             </motion.div>
 
             {/* ── Decorative sparkle stars ── */}
