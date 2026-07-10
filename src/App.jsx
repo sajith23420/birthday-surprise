@@ -52,10 +52,12 @@ function GlobalFloatingElements() {
 /*  2. SPLASH / INTRO SCREEN                                             */
 /* ═══════════════════════════════════════════════════════════════════════ */
 function SplashScreen({ onComplete }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    const timer = setTimeout(onComplete, 3500);
+    const timer = setTimeout(() => setIsLoaded(true), 3500);
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
 
   return (
     <motion.div
@@ -90,21 +92,49 @@ function SplashScreen({ onComplete }) {
         CRAFTED WITH LOVE &nbsp;·&nbsp; JUST FOR YOU
       </motion.p>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2 }}
-        className="mt-10 flex gap-1.5"
-      >
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="w-2 h-2 rounded-full bg-pink-300"
-            animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1, delay: i * 0.2, repeat: Infinity }}
-          />
-        ))}
-      </motion.div>
+      <div className="h-24 mt-10 flex items-center justify-center">
+        <AnimatePresence mode="wait">
+          {!isLoaded ? (
+            <motion.div
+              key="loader"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+              className="flex gap-1.5"
+            >
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-2 h-2 rounded-full bg-pink-300"
+                  animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 1, delay: i * 0.2, repeat: Infinity }}
+                />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.button
+              key="button"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              whileHover={{ y: -3, scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onComplete}
+              style={{
+                backgroundImage: 'linear-gradient(180deg, #ff3d8d, #ff6fa8)',
+                boxShadow: '0 18px 45px rgba(255,40,130,.35), 0 0 40px rgba(255,90,170,.35)',
+              }}
+              className="relative group overflow-hidden flex items-center justify-center px-10 py-5 rounded-full text-white font-sans font-bold text-lg"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                Open Your Surprise <span className="inline-block" style={{ WebkitTextFillColor: 'initial' }}>❤️</span>
+              </span>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 }
@@ -273,14 +303,14 @@ function AudioPlayer() {
     audioRef.current.muted = isMuted;
 
     const events = ['pointerdown', 'click', 'touchstart', 'keydown', 'wheel'];
-    
+
     const handleInteraction = async () => {
       events.forEach(e => window.removeEventListener(e, handleInteraction));
       if (audioRef.current) {
         try {
           await audioRef.current.play();
           setIsPlaying(true);
-        } catch (e) {}
+        } catch (e) { }
       }
     };
 
@@ -320,7 +350,7 @@ function AudioPlayer() {
       setIsPlaying(false);
       localStorage.setItem('musicPlaying', 'false');
     } else {
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().catch(() => { });
       setIsPlaying(true);
       localStorage.setItem('musicPlaying', 'true');
     }
@@ -367,7 +397,7 @@ function AudioPlayer() {
           >
             {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
           </motion.button>
-          
+
           <motion.button
             onClick={togglePlay}
             whileHover={{ scale: 1.1 }}
@@ -454,6 +484,35 @@ function OrbitImage({ src, radius, startAngle, duration, label }) {
           )}
         </motion.div>
       </div>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════ */
+function WhyYouCard({ icon, title, desc, delay }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay }}
+      whileHover={{ y: -5 }}
+      className="group relative bg-white/40 backdrop-blur-xl rounded-[1.5rem] p-6 shadow-[0_10px_30px_rgba(255,100,150,0.1)] border border-white/60 text-center transition-all duration-300 hover:shadow-[0_15px_40px_rgba(255,100,150,0.25)] hover:bg-white/50"
+    >
+      <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-br from-pink-100 to-pink-200 border border-white flex items-center justify-center text-2xl shadow-inner mb-4 group-hover:scale-110 transition-transform duration-300">
+        {icon}
+      </div>
+      <h3 className="text-xl md:text-2xl font-bold text-pink-900 mb-3" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+        {title}
+      </h3>
+      <div className="flex items-center justify-center gap-2 mb-4 opacity-70">
+        <div className="w-12 h-px bg-gradient-to-r from-transparent to-pink-300" />
+        <span className="text-[10px] text-pink-400">♥</span>
+        <div className="w-12 h-px bg-gradient-to-l from-transparent to-pink-300" />
+      </div>
+      <p className="text-pink-900/80 leading-relaxed text-sm md:text-base font-light" style={{ fontFamily: '"Inter", sans-serif' }}>
+        {desc}
+      </p>
     </motion.div>
   );
 }
@@ -925,20 +984,20 @@ export default function App() {
       {/*  CHERISHED MOMENTS GALLERY                                     */}
       {/* ════════════════════════════════════════════════════════════════ */}
       <FadeSection id="moments" className="relative z-10 min-h-[100svh] lg:h-screen lg:max-h-screen flex flex-col justify-center py-16 lg:py-0 px-6 overflow-x-hidden lg:overflow-hidden">
-        
+
         <div className="flex-1 flex flex-col justify-center max-w-[1400px] mx-auto w-full h-full relative">
-          
+
           <div className="flex flex-col lg:flex-row items-center h-full w-full gap-8 lg:gap-4">
-            
+
             {/* LEFT COLUMN (35%) */}
             <div className="w-full lg:w-[35%] flex flex-col justify-center text-center lg:text-left z-20 pt-10 lg:pt-0">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
                 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight mb-4 lg:mb-6 bg-gradient-to-br from-rose-700 via-pink-600 to-rose-500 bg-clip-text text-transparent drop-shadow-sm leading-tight"
               >
                 Cherished <br className="hidden lg:block" /> Moments
               </motion.h2>
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-pink-500 font-cursive text-3xl md:text-4xl lg:text-5xl drop-shadow-sm mb-6 lg:mb-12"
               >
@@ -948,9 +1007,9 @@ export default function App() {
 
             {/* RIGHT CONTENT (65%) - Desktop Collage */}
             <div className="hidden lg:flex w-[65%] relative h-[90%] items-center justify-center">
-              
+
               {/* Center Largest (/8.png) */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1 }}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 hover:scale-105 hover:rotate-1 hover:z-50"
               >
@@ -959,7 +1018,7 @@ export default function App() {
               </motion.div>
 
               {/* Top Left (/5.png) */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -50, y: -50, rotate: -20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: -6 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.2 }}
                 className="absolute top-[8%] left-[8%] xl:left-[12%] z-20 transition-all duration-500 hover:scale-110 hover:-rotate-2 hover:z-50"
               >
@@ -968,7 +1027,7 @@ export default function App() {
               </motion.div>
 
               {/* Top Right (/3.png) */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 50, y: -50, rotate: 20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: 5 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.3 }}
                 className="absolute top-[12%] right-[5%] xl:right-[10%] z-20 transition-all duration-500 hover:scale-110 hover:rotate-8 hover:z-50"
               >
@@ -977,7 +1036,7 @@ export default function App() {
               </motion.div>
 
               {/* Bottom Left (/10.png) */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -50, y: 50, rotate: -20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: -4 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.4 }}
                 className="absolute bottom-[18%] left-[2%] xl:left-[6%] z-40 transition-all duration-500 hover:scale-110 hover:-rotate-1 hover:z-50"
               >
@@ -986,7 +1045,7 @@ export default function App() {
               </motion.div>
 
               {/* Bottom Right (/6.png) */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 50, y: 50, rotate: 20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: 3 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }}
                 className="absolute bottom-[12%] right-[3%] xl:right-[8%] z-40 transition-all duration-500 hover:scale-110 hover:rotate-6 hover:z-50"
               >
@@ -995,7 +1054,7 @@ export default function App() {
               </motion.div>
 
               {/* Center Bottom (/8.png) */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 50, rotate: -10 }} whileInView={{ opacity: 1, y: 0, rotate: -2 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.6 }}
                 className="absolute -bottom-[2%] left-[45%] -translate-x-1/2 z-50 transition-all duration-500 hover:scale-110 hover:rotate-1 hover:z-50"
               >
@@ -1008,40 +1067,40 @@ export default function App() {
 
             {/* RIGHT CONTENT - Mobile Stacked Cards */}
             <div className="lg:hidden w-full flex flex-col gap-10 items-center justify-center pb-20 relative z-20">
-               {[
-                 { src: "/8.png", label: "💖 The Best Day", aspect: "aspect-[4/5]" },
-                 { src: "/5.png", label: "💖 Spring Love", aspect: "aspect-[3/4]" },
-                 { src: "/3.png", label: "🌸 Garden Day", aspect: "aspect-[4/5]" },
-                 { src: "/10.png", label: "🌅 Sunset Walk", aspect: "aspect-[4/3]" },
-                 { src: "/6.png", label: "☕ First Coffee", aspect: "aspect-[3/2]" },
-                 { src: "/8.png", label: "🎂 Birthday Vibes", aspect: "aspect-[2/1]" }
-               ].map((item, idx) => (
-                 <motion.div 
-                   key={idx}
-                   initial={{ opacity: 0, y: 30 }}
-                   whileInView={{ opacity: 1, y: 0 }}
-                   viewport={{ once: true, margin: "-50px" }}
-                   className="relative w-[85%] max-w-sm"
-                 >
-                   <img src={item.src} className={`w-full ${item.aspect} object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_35px_rgba(233,30,99,0.25)] overflow-hidden`} />
-                   <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl px-5 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">
-                     {item.label}
-                   </div>
-                 </motion.div>
-               ))}
+              {[
+                { src: "/8.png", label: "💖 The Best Day", aspect: "aspect-[4/5]" },
+                { src: "/5.png", label: "💖 Spring Love", aspect: "aspect-[3/4]" },
+                { src: "/3.png", label: "🌸 Garden Day", aspect: "aspect-[4/5]" },
+                { src: "/10.png", label: "🌅 Sunset Walk", aspect: "aspect-[4/3]" },
+                { src: "/6.png", label: "☕ First Coffee", aspect: "aspect-[3/2]" },
+                { src: "/8.png", label: "🎂 Birthday Vibes", aspect: "aspect-[2/1]" }
+              ].map((item, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  className="relative w-[85%] max-w-sm"
+                >
+                  <img src={item.src} className={`w-full ${item.aspect} object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_35px_rgba(233,30,99,0.25)] overflow-hidden`} />
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl px-5 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">
+                    {item.label}
+                  </div>
+                </motion.div>
+              ))}
             </div>
 
           </div>
 
           {/* Bottom Quote */}
           <div className="w-full text-center pb-6 lg:pb-8 lg:absolute lg:bottom-2 lg:left-0 lg:right-0 z-50">
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.8 }}
               className="font-serif text-xl md:text-2xl lg:text-3xl italic text-pink-800 drop-shadow-sm px-4"
             >
               "Every memory with you<br className="lg:hidden" /> is my favorite place to return."
             </motion.p>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 1 }}
               className="mt-3 flex justify-center"
             >
@@ -1055,84 +1114,343 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  LETTER SECTION                                                */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="letter" className="relative z-10 py-24 md:py-32 px-6 max-w-4xl mx-auto text-center">
-        <motion.div
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          className="inline-block mb-6"
-        >
-          <div className="w-16 h-16 rounded-full bg-pink-100 flex items-center justify-center mx-auto shadow-inner shadow-pink-200/50">
-            <Quote size={28} className="text-pink-500" />
-          </div>
-        </motion.div>
+      <section id="letter" className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden py-16 lg:py-24">
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        `}</style>
 
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-pink-800 mb-2 drop-shadow-sm">
-          A Letter Written in Stars
-        </h2>
-        <p className="text-pink-500 font-cursive text-2xl md:text-3xl mb-12 drop-shadow-sm">
-          Words from the deepest corner of the heart
-        </p>
+        {/* Background decorations */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Subtle SVG Stars */}
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={`star-${i}`}
+              className="absolute text-yellow-400/60 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                scale: Math.random() * 0.5 + 0.5
+              }}
+              animate={{ opacity: [0.1, 0.8, 0.1] }}
+              transition={{ repeat: Infinity, duration: 3 + Math.random() * 4 }}
+            >
+              ✦
+            </motion.div>
+          ))}
+          {/* Subtle Glowing Hearts */}
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={`heart-${i}`}
+              className="absolute text-pink-400/40 drop-shadow-[0_0_10px_rgba(244,114,182,0.6)]"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                scale: Math.random() * 0.5 + 0.3
+              }}
+              animate={{ y: [0, -30, 0], opacity: [0, 0.7, 0] }}
+              transition={{ repeat: Infinity, duration: 4 + Math.random() * 5 }}
+            >
+              ♥
+            </motion.div>
+          ))}
+        </div>
 
-        <blockquote className="relative bg-white/70 backdrop-blur-lg rounded-[2rem] p-10 md:p-14 shadow-xl shadow-pink-200/30 border border-pink-100 text-left">
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-20 h-1.5 bg-gradient-to-r from-transparent via-pink-400 to-transparent rounded-full opacity-60" />
+        {/* SVG Decorative Dashed Paths (Hidden on mobile) */}
+        <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" className="absolute inset-0 w-full h-full pointer-events-none opacity-0 lg:opacity-60" style={{ zIndex: 0 }}>
+          <path d="M 200 250 Q 350 150 500 350" fill="transparent" stroke="url(#goldGradient)" strokeWidth="2.5" strokeDasharray="8 8" />
+          <path d="M 200 800 Q 350 900 500 650" fill="transparent" stroke="url(#goldGradient)" strokeWidth="2.5" strokeDasharray="8 8" />
+          <path d="M 800 500 Q 650 300 500 450" fill="transparent" stroke="url(#goldGradient)" strokeWidth="2.5" strokeDasharray="8 8" />
+          <defs>
+            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d4af37" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#f3e5ab" stopOpacity="0.3" />
+            </linearGradient>
+          </defs>
+        </svg>
 
-          <p className="text-pink-900/80 font-sans leading-loose text-lg md:text-xl font-light">
-            You are a beautiful dream that the universe carefully wove into reality.
-            You carry a light so warm and golden that everyone around you feels its glow.
-            You bring so much magic into ordinary moments — turning simple laughter into
-            music and quiet silences into the most comforting poetry.
-          </p>
-          <p className="mt-6 text-pink-900/80 font-sans leading-loose text-lg md:text-xl font-light">
-            You make every moment magical, every heartbeat meaningful, and every day
-            worth celebrating. You are kindness wrapped in grace, courage wrapped in
-            softness, and beauty wrapped in the purest soul this world has ever known.
-          </p>
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col items-center justify-center px-4">
 
-          <footer className="mt-12 pt-8 border-t border-pink-100 text-center">
-            <p className="text-pink-600 font-cursive text-3xl md:text-4xl">
-              Forever yours, Sajith
+          {/* Title Area */}
+          <motion.div
+            initial={{ opacity: 0, y: -40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="text-center w-full mb-10 lg:mb-16 mt-8 lg:mt-0"
+          >
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-pink-900 drop-shadow-sm mb-3" style={{ fontFamily: '"Playfair Display", serif' }}>
+              A Letter Written in Stars ✨
+            </h2>
+            <p className="text-2xl md:text-4xl drop-shadow-sm bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600" style={{ fontFamily: '"Great Vibes", cursive' }}>
+              Words from the deepest corner of the heart♡
             </p>
-            <Heart size={20} className="text-pink-400 fill-pink-400 mx-auto mt-4" />
-          </footer>
-        </blockquote>
-      </FadeSection>
+          </motion.div>
+
+          {/* Main Layout Container */}
+          <div className="relative w-full flex items-center justify-center min-h-[500px]">
+
+            {/* Left Side Images (Hidden on mobile, absolute on desktop) */}
+            <div className="hidden lg:block absolute left-0 xl:left-8 top-0 bottom-0 w-[260px]">
+              {/* Top Left */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.3 }}
+                className="absolute top-[5%] left-0 flex flex-col items-center z-10"
+              >
+                <div className="w-40 h-40 rounded-full p-2 bg-white/30 backdrop-blur-xl shadow-2xl border border-white/60 hover:scale-105 transition-transform duration-500">
+                  <img src="/2.png" className="w-full h-full rounded-full object-cover shadow-inner" />
+                </div>
+                <div className="mt-4 bg-white/50 backdrop-blur-md px-5 py-2 rounded-full border border-white/60 text-pink-950 text-sm font-bold shadow-lg" style={{ fontFamily: '"Playfair Display", serif' }}>
+                  Special Moments ❤️
+                </div>
+              </motion.div>
+
+              {/* Bottom Left */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="absolute bottom-[5%] right-0 flex flex-col items-center z-10"
+              >
+                <div className="w-44 h-44 rounded-full p-2 bg-white/30 backdrop-blur-xl shadow-2xl border border-white/60 hover:scale-105 transition-transform duration-500">
+                  <img src="/5.png" className="w-full h-full rounded-full object-cover shadow-inner" />
+                </div>
+                <div className="mt-4 bg-white/50 backdrop-blur-md px-5 py-2 rounded-full border border-white/60 text-pink-950 text-sm font-bold shadow-lg" style={{ fontFamily: '"Playfair Display", serif' }}>
+                  Beautiful You 🌸
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right Side Image (Hidden on mobile) */}
+            <div className="hidden lg:block absolute right-0 xl:right-8 top-1/2 -translate-y-1/2 w-[260px]">
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.7 }}
+                className="flex flex-col items-center z-10"
+              >
+                <div className="w-48 h-48 rounded-full p-2 bg-white/30 backdrop-blur-xl shadow-2xl border border-white/60 hover:scale-105 transition-transform duration-500">
+                  <img src="/9.png" className="w-full h-full rounded-full object-cover shadow-inner" />
+                </div>
+                <div className="mt-4 bg-white/50 backdrop-blur-md px-5 py-2 rounded-full border border-white/60 text-pink-950 text-sm font-bold shadow-lg" style={{ fontFamily: '"Playfair Display", serif' }}>
+                  Endless Love ❤️
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Center Letter & Portrait */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="relative w-full max-w-[700px] z-20 flex flex-col items-center"
+            >
+              {/* Portrait overlapping top */}
+              <motion.div
+                animate={{ y: [-6, 6, -6] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative z-30 -mb-16"
+              >
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-[6px] border-white shadow-[0_0_40px_rgba(255,100,150,0.4)] overflow-hidden bg-pink-50">
+                  <img src="/3.png" className="w-full h-full object-cover" />
+                </div>
+                {/* Decorative overlapping flowers */}
+                <div className="absolute -bottom-1 -right-4 text-3xl drop-shadow-lg rotate-12">🌸</div>
+                <div className="absolute top-2 -left-4 text-2xl drop-shadow-lg -rotate-12">🌺</div>
+              </motion.div>
+
+              {/* The Paper Letter */}
+              <div
+                className="relative w-full rounded-[2rem] p-8 md:p-14 text-center md:text-left"
+                style={{
+                  backgroundColor: '#fdfaf5', // warm cream
+                  backgroundImage: 'radial-gradient(rgba(150,100,50,0.06) 1px, transparent 1px)',
+                  backgroundSize: '12px 12px',
+                  boxShadow: '0 30px 60px rgba(200,100,120,0.15), inset 0 0 60px rgba(240,220,200,0.6)',
+                  border: '1px solid rgba(220,200,180,0.8)'
+                }}
+              >
+                {/* Gold corner ornaments */}
+                <div className="absolute top-5 left-5 w-8 h-8 border-t-[3px] border-l-[3px] border-[#d4af37]/70 rounded-tl-xl" />
+                <div className="absolute top-5 right-5 w-8 h-8 border-t-[3px] border-r-[3px] border-[#d4af37]/70 rounded-tr-xl" />
+                <div className="absolute bottom-5 left-5 w-8 h-8 border-b-[3px] border-l-[3px] border-[#d4af37]/70 rounded-bl-xl" />
+                <div className="absolute bottom-5 right-5 w-8 h-8 border-b-[3px] border-r-[3px] border-[#d4af37]/70 rounded-br-xl" />
+
+                <div className="mt-12" style={{ fontFamily: '"Cormorant Garamond", serif', color: '#3a2b22' }}>
+                  <p className="leading-[2.2] text-[18px] md:text-[22px] font-medium px-2 md:px-6">
+                    You are a beautiful dream that the universe carefully wove into reality.
+                    You carry a light so warm and golden that everyone around you feels its glow.
+                    You bring so much magic into ordinary moments — turning simple laughter into
+                    music and quiet silences into the most comforting poetry.
+                  </p>
+                  <p className="mt-6 leading-[2.2] text-[18px] md:text-[22px] font-medium px-2 md:px-6">
+                    You make every moment magical, every heartbeat meaningful, and every day
+                    worth celebrating. You are kindness wrapped in grace, courage wrapped in
+                    softness, and beauty wrapped in the purest soul this world has ever known.
+                  </p>
+                </div>
+
+                <div className="mt-14 pt-8 border-t border-[#e8d5c4] flex flex-col items-center md:items-end md:pr-12">
+                  <p className="text-xl md:text-2xl text-[#5c473a]" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+                    Forever Yours,
+                  </p>
+                  <p className="text-5xl md:text-6xl text-[#9b0048] mt-2 -rotate-3 drop-shadow-sm" style={{ fontFamily: '"Allura", cursive' }}>
+                    Sajith ♡
+                  </p>
+                </div>
+
+                {/* Wax Seal */}
+                <motion.div
+                  animate={{ scale: [1, 1.03, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -bottom-8 -right-4 md:-right-8 z-30"
+                >
+                  <div className="relative">
+                    {/* Ribbon */}
+                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-10 h-20 bg-[#a00048] shadow-lg transform -rotate-12 rounded-b-sm" />
+                    <div className="absolute -bottom-12 left-1/2 -translate-x-1/3 w-10 h-24 bg-[#7a0036] shadow-lg transform rotate-6 rounded-b-sm" />
+                    {/* Seal */}
+                    <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[#e6005c] via-[#b30047] to-[#800033] border-[3px] border-[#660029] shadow-[0_12px_25px_rgba(120,0,40,0.6),inset_0_5px_10px_rgba(255,100,150,0.5)] flex items-center justify-center">
+                      <span className="font-serif text-[#ffb3d1] text-4xl md:text-5xl drop-shadow-md" style={{ fontFamily: '"Playfair Display", serif' }}>S</span>
+                      {/* Inner embossed ring */}
+                      <div className="absolute inset-2 border-2 border-[#ff66a3]/30 rounded-full" />
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
 
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  WHY YOU ARE EXTRAORDINARY                                     */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="why-you" className="relative z-10 py-24 md:py-32 px-6 max-w-7xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-pink-800 text-center mb-2 drop-shadow-sm">
-          Why You Are Extraordinary
-        </h2>
-        <p className="text-pink-500 font-cursive text-2xl md:text-3xl text-center mb-16 drop-shadow-sm">
-          Just a few of the million reasons you are adored
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {qualities.map((q, i) => (
+      <section id="why-you" className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden py-16 lg:py-20 px-4">
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        `}</style>
+        
+        {/* Background Decorations */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          {/* Subtle SVG Stars */}
+          {[...Array(15)].map((_, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15, duration: 0.6 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg shadow-pink-100/50 border border-pink-50 text-center group cursor-default transition-all"
+              key={`star-wy-${i}`}
+              className="absolute text-yellow-400/50 drop-shadow-[0_0_5px_rgba(250,204,21,0.6)]"
+              style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, scale: Math.random() * 0.4 + 0.4 }}
+              animate={{ opacity: [0.1, 0.7, 0.1] }}
+              transition={{ repeat: Infinity, duration: 2 + Math.random() * 3 }}
             >
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center mx-auto mb-6 group-hover:from-pink-100 group-hover:to-pink-200 transition-colors shadow-inner shadow-pink-100/50">
-                <q.icon size={28} className="text-pink-500" />
-              </div>
-              <h3 className="font-serif font-bold text-pink-800 text-xl mb-3">
-                {q.title}
-              </h3>
-              <p className="text-pink-700/70 font-sans text-base leading-relaxed font-light">
-                {q.desc}
-              </p>
+              ✦
             </motion.div>
           ))}
+          {/* Subtle Glowing Hearts */}
+          {[...Array(10)].map((_, i) => (
+            <motion.div
+              key={`heart-wy-${i}`}
+              className="absolute text-pink-400/30 drop-shadow-[0_0_8px_rgba(244,114,182,0.5)]"
+              style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%`, scale: Math.random() * 0.5 + 0.3 }}
+              animate={{ y: [0, -20, 0], opacity: [0, 0.6, 0] }}
+              transition={{ repeat: Infinity, duration: 4 + Math.random() * 5 }}
+            >
+              ♥
+            </motion.div>
+          ))}
+          {/* Large blurred radial glow in center */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-pink-200/20 to-rose-200/20 rounded-full blur-[100px]" />
         </div>
-      </FadeSection>
+
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col items-center h-full justify-center">
+          {/* Title Area */}
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-8 lg:mb-16 mt-6 lg:mt-0"
+          >
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-pink-900 drop-shadow-sm mb-4" style={{ fontFamily: '"Playfair Display", serif' }}>
+              ✨ Why You Are Extraordinary ♡
+            </h2>
+            <p className="text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-rose-600 to-pink-500 drop-shadow-sm" style={{ fontFamily: '"Great Vibes", cursive' }}>
+              "Just a few of the million reasons you are adored 🌸"
+            </p>
+          </motion.div>
+
+          {/* Main Layout */}
+          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-12 xl:gap-20">
+            
+            {/* LEFT CARDS */}
+            <div className="flex flex-col gap-6 lg:gap-8 w-full max-w-sm order-2 lg:order-1 z-20">
+              <WhyYouCard
+                icon="😊"
+                title="Your Smile"
+                desc="Your smile lights up even the darkest days and turns ordinary moments into unforgettable memories."
+                delay={0.2}
+              />
+              <WhyYouCard
+                icon="♡"
+                title="Your Kindness"
+                desc="Your gentle heart makes everyone around you feel safe, loved, and appreciated."
+                delay={0.4}
+              />
+            </div>
+
+            {/* CENTER PORTRAIT */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="relative order-1 lg:order-2 z-10 flex-shrink-0 my-4 lg:my-0"
+            >
+              <motion.div 
+                animate={{ y: [-8, 8, -8] }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative"
+              >
+                {/* Decorative Rings */}
+                <div className="absolute inset-0 rounded-full border-[1px] border-pink-400/30 scale-[1.15]" />
+                <div className="absolute inset-0 rounded-full border-[1px] border-pink-300/20 scale-[1.3]" />
+                <div className="absolute inset-0 rounded-full border-[1px] border-pink-200/10 scale-[1.45]" />
+                
+                {/* Portrait */}
+                <div className="w-56 h-56 md:w-64 md:h-64 rounded-full border-[6px] border-white shadow-[0_0_50px_rgba(255,100,150,0.5)] overflow-hidden bg-pink-100 relative z-20">
+                  <img src="/3.png" className="w-full h-full object-cover" />
+                </div>
+                
+                {/* Flowers overlapping frame */}
+                <div className="absolute -bottom-2 -left-2 text-4xl drop-shadow-lg z-30 -rotate-12">🌸</div>
+                <div className="absolute top-4 -right-4 text-3xl drop-shadow-lg z-30 rotate-12">🌺</div>
+              </motion.div>
+            </motion.div>
+
+            {/* RIGHT CARDS */}
+            <div className="flex flex-col gap-6 lg:gap-8 w-full max-w-sm order-3 z-20">
+              <WhyYouCard
+                icon="✨"
+                title="Your Beautiful Soul"
+                desc="You carry warmth, grace, and positivity wherever you go, making life brighter for everyone."
+                delay={0.6}
+              />
+              <WhyYouCard
+                icon="👑"
+                title="Everything About You"
+                desc="You are simply one of a kind, and every little thing about you makes me fall in love even more."
+                delay={0.8}
+              />
+            </div>
+
+          </div>
+        </div>
+      </section>
 
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  CAKE FINALE                                                   */}
