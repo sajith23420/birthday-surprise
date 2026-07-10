@@ -853,36 +853,131 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  CHERISHED MOMENTS GALLERY                                     */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="moments" className="relative z-10 py-24 md:py-32 px-6">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-pink-800 text-center mb-2 drop-shadow-sm">
-          Cherished Moments
-        </h2>
-        <p className="text-pink-500 font-cursive text-2xl md:text-3xl text-center mb-12 drop-shadow-sm">
-          Every picture tells your beautiful story ✨
-        </p>
+      <FadeSection id="moments" className="relative z-10 min-h-[100svh] lg:h-screen lg:max-h-screen flex flex-col justify-center py-16 lg:py-0 px-6 overflow-x-hidden lg:overflow-hidden">
+        
+        <div className="flex-1 flex flex-col justify-center max-w-[1400px] mx-auto w-full h-full relative">
+          
+          <div className="flex flex-col lg:flex-row items-center h-full w-full gap-8 lg:gap-4">
+            
+            {/* LEFT COLUMN (35%) */}
+            <div className="w-full lg:w-[35%] flex flex-col justify-center text-center lg:text-left z-20 pt-10 lg:pt-0">
+              <motion.h2 
+                initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+                className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight mb-4 lg:mb-6 bg-gradient-to-br from-rose-700 via-pink-600 to-rose-500 bg-clip-text text-transparent drop-shadow-sm leading-tight"
+              >
+                Cherished <br className="hidden lg:block" /> Moments
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-pink-500 font-cursive text-3xl md:text-4xl lg:text-5xl drop-shadow-sm mb-6 lg:mb-12"
+              >
+                Every picture tells your beautiful story ✨
+              </motion.p>
+            </div>
 
-        <div className="flex gap-8 overflow-x-auto hide-scrollbar px-6 pb-12 snap-x snap-mandatory max-w-6xl mx-auto">
-          {['/3.jpg', '/4.jpg', '/5.jpg'].map((src, i) => (
-            <motion.div
-              key={i}
-              className="flex-shrink-0 snap-center"
-              whileHover={{ y: -12, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 200 }}
-            >
-              <div className="relative bg-white rounded-xl p-3 shadow-xl shadow-pink-200/40 border border-pink-50">
-                <img
-                  src={src}
-                  alt={`Cherished moment ${i + 1}`}
-                  className="w-72 sm:w-80 md:w-88 aspect-[4/5] object-cover rounded-lg border-4 border-white"
-                />
-                <div className="absolute bottom-3 left-3 right-3 bg-gradient-to-t from-black/50 to-transparent rounded-b-lg p-5 pt-10">
-                  <p className="text-white font-cursive text-xl md:text-2xl text-center">
-                    {['A moment frozen in love', 'Where every glance is a story', 'Pure magic, pure you'][i]}
-                  </p>
+            {/* RIGHT CONTENT (65%) - Desktop Collage */}
+            <div className="hidden lg:flex w-[65%] relative h-[90%] items-center justify-center">
+              
+              {/* Center Largest (/8.png) */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1 }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 hover:scale-105 hover:rotate-1 hover:z-50"
+              >
+                <div className="absolute -inset-8 bg-pink-400/30 blur-[40px] rounded-full pointer-events-none" />
+                <img src="/8.png" alt="Center memory" className="w-[280px] xl:w-[320px] aspect-[4/5] object-cover rounded-[30px] border-[8px] border-white shadow-[0_25px_60px_rgba(233,30,99,0.35)] overflow-hidden" />
+              </motion.div>
+
+              {/* Top Left (/5.png) */}
+              <motion.div 
+                initial={{ opacity: 0, x: -50, y: -50, rotate: -20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: -6 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.2 }}
+                className="absolute top-[8%] left-[8%] xl:left-[12%] z-20 transition-all duration-500 hover:scale-110 hover:-rotate-2 hover:z-50"
+              >
+                <img src="/5.png" alt="Memory" className="w-[180px] xl:w-[220px] aspect-[3/4] object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_40px_rgba(233,30,99,0.25)] overflow-hidden" />
+                <div className="absolute -top-5 -left-5 bg-white/70 backdrop-blur-xl px-4 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">💖 Spring Love</div>
+              </motion.div>
+
+              {/* Top Right (/3.png) */}
+              <motion.div 
+                initial={{ opacity: 0, x: 50, y: -50, rotate: 20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: 5 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.3 }}
+                className="absolute top-[12%] right-[5%] xl:right-[10%] z-20 transition-all duration-500 hover:scale-110 hover:rotate-8 hover:z-50"
+              >
+                <img src="/3.png" alt="Memory" className="w-[190px] xl:w-[230px] aspect-[4/5] object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_40px_rgba(233,30,99,0.25)] overflow-hidden" />
+                <div className="absolute -bottom-4 -right-4 bg-white/70 backdrop-blur-xl px-4 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">🌸 Garden Day</div>
+              </motion.div>
+
+              {/* Bottom Left (/10.png) */}
+              <motion.div 
+                initial={{ opacity: 0, x: -50, y: 50, rotate: -20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: -4 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.4 }}
+                className="absolute bottom-[18%] left-[2%] xl:left-[6%] z-40 transition-all duration-500 hover:scale-110 hover:-rotate-1 hover:z-50"
+              >
+                <img src="/10.png" alt="Memory" className="w-[220px] xl:w-[260px] aspect-[4/3] object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_40px_rgba(233,30,99,0.25)] overflow-hidden" />
+                <div className="absolute -bottom-4 -left-3 bg-white/70 backdrop-blur-xl px-4 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">🌅 Sunset Walk</div>
+              </motion.div>
+
+              {/* Bottom Right (/6.png) */}
+              <motion.div 
+                initial={{ opacity: 0, x: 50, y: 50, rotate: 20 }} whileInView={{ opacity: 1, x: 0, y: 0, rotate: 3 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5 }}
+                className="absolute bottom-[12%] right-[3%] xl:right-[8%] z-40 transition-all duration-500 hover:scale-110 hover:rotate-6 hover:z-50"
+              >
+                <img src="/6.png" alt="Memory" className="w-[240px] xl:w-[280px] aspect-[3/2] object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_40px_rgba(233,30,99,0.25)] overflow-hidden" />
+                <div className="absolute -top-4 -right-2 bg-white/70 backdrop-blur-xl px-4 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">☕ First Coffee</div>
+              </motion.div>
+
+              {/* Center Bottom (/8.png) */}
+              <motion.div 
+                initial={{ opacity: 0, y: 50, rotate: -10 }} whileInView={{ opacity: 1, y: 0, rotate: -2 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.6 }}
+                className="absolute -bottom-[2%] left-[45%] -translate-x-1/2 z-50 transition-all duration-500 hover:scale-110 hover:rotate-1 hover:z-50"
+              >
+                <div className="bg-white/95 p-3 rounded-2xl shadow-[0_20px_45px_rgba(233,30,99,0.35)] border border-pink-100 flex flex-col items-center">
+                  <img src="/8.png" alt="Memory" className="w-[160px] xl:w-[180px] aspect-[2/1] object-cover rounded-xl overflow-hidden" />
+                  <span className="mt-2 text-xs font-cursive font-bold text-pink-500 whitespace-nowrap">🎂 Birthday Vibes</span>
                 </div>
-              </div>
+              </motion.div>
+            </div>
+
+            {/* RIGHT CONTENT - Mobile Stacked Cards */}
+            <div className="lg:hidden w-full flex flex-col gap-10 items-center justify-center pb-20 relative z-20">
+               {[
+                 { src: "/8.png", label: "💖 The Best Day", aspect: "aspect-[4/5]" },
+                 { src: "/5.png", label: "💖 Spring Love", aspect: "aspect-[3/4]" },
+                 { src: "/3.png", label: "🌸 Garden Day", aspect: "aspect-[4/5]" },
+                 { src: "/10.png", label: "🌅 Sunset Walk", aspect: "aspect-[4/3]" },
+                 { src: "/6.png", label: "☕ First Coffee", aspect: "aspect-[3/2]" },
+                 { src: "/8.png", label: "🎂 Birthday Vibes", aspect: "aspect-[2/1]" }
+               ].map((item, idx) => (
+                 <motion.div 
+                   key={idx}
+                   initial={{ opacity: 0, y: 30 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true, margin: "-50px" }}
+                   className="relative w-[85%] max-w-sm"
+                 >
+                   <img src={item.src} className={`w-full ${item.aspect} object-cover rounded-3xl border-[5px] border-white shadow-[0_15px_35px_rgba(233,30,99,0.25)] overflow-hidden`} />
+                   <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-xl px-5 py-2 rounded-full shadow-lg border border-white/60 text-xs font-semibold text-pink-700 whitespace-nowrap">
+                     {item.label}
+                   </div>
+                 </motion.div>
+               ))}
+            </div>
+
+          </div>
+
+          {/* Bottom Quote */}
+          <div className="w-full text-center pb-6 lg:pb-8 lg:absolute lg:bottom-2 lg:left-0 lg:right-0 z-50">
+            <motion.p 
+              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.8 }}
+              className="font-serif text-xl md:text-2xl lg:text-3xl italic text-pink-800 drop-shadow-sm px-4"
+            >
+              "Every memory with you<br className="lg:hidden" /> is my favorite place to return."
+            </motion.p>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 1 }}
+              className="mt-3 flex justify-center"
+            >
+              <Heart size={16} className="text-pink-500 fill-pink-500 opacity-80" />
             </motion.div>
-          ))}
+          </div>
+
         </div>
       </FadeSection>
 
