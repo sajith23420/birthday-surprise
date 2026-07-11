@@ -4,7 +4,7 @@ import confetti from 'canvas-confetti';
 import { TypeAnimation } from 'react-type-animation';
 import {
   Heart, Sparkles, Pause, Play,
-  X, Gift, Smile, Flame, Crown, Quote, Flower2, Volume2, VolumeX
+  X, Gift, Smile, Flame, Crown, Quote, Flower2, Volume2, VolumeX, Menu
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════════════ */
@@ -143,39 +143,100 @@ function SplashScreen({ onComplete }) {
 /*  3. TOP NAVIGATION                                                    */
 /* ═══════════════════════════════════════════════════════════════════════ */
 function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMenuOpen]);
+
+  const links = ['HOME', 'JOURNEY', 'UNIVERSE', 'MOMENTS', 'LETTER', 'WHY YOU', 'CELEBRATE'];
+
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, duration: 0.6 }}
-      className="fixed top-4 left-4 right-4 z-40 nav-premium-glass rounded-2xl"
-    >
-      <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
-        <motion.div whileHover={{ rotate: 20, scale: 1.1 }} className="text-pink-400">
-          <Flower2 size={22} />
-        </motion.div>
+    <>
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        className="fixed top-4 left-4 right-4 z-50 nav-premium-glass rounded-2xl"
+      >
+        <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
+          <motion.div whileHover={{ rotate: 20, scale: 1.1 }} className="text-pink-400">
+            <Flower2 size={22} />
+          </motion.div>
 
-        <div className="hidden md:flex items-center gap-6 lg:gap-8">
-          {['HOME', 'JOURNEY', 'UNIVERSE', 'MOMENTS', 'LETTER', 'WHY YOU', 'CELEBRATE'].map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase().replace(' ', '-')}`}
-              className="nav-link-elegant text-[10px] lg:text-[11px] tracking-[0.2em] text-pink-500/80 hover:text-pink-700 transition-colors font-sans uppercase font-medium"
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            {links.map((link) => (
+              <a
+                key={link}
+                href={`#${link.toLowerCase().replace(' ', '-')}`}
+                className="nav-link-elegant text-[10px] lg:text-[11px] tracking-[0.2em] text-pink-500/80 hover:text-pink-700 transition-colors font-sans uppercase font-medium"
+              >
+                {link}
+              </a>
+            ))}
+          </div>
+
+          <div className="hidden md:block">
+            <motion.div
+              className="text-pink-400"
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
             >
-              {link}
-            </a>
-          ))}
-        </div>
+              <Heart size={18} className="fill-pink-300" />
+            </motion.div>
+          </div>
 
-        <motion.div
-          className="text-pink-400"
-          animate={{ scale: [1, 1.15, 1] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        >
-          <Heart size={18} className="fill-pink-300" />
-        </motion.div>
-      </div>
-    </motion.nav>
+          <div className="md:hidden">
+            <motion.button
+              onClick={() => setIsMenuOpen(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-11 h-11 rounded-full bg-white/90 backdrop-blur-md shadow-[0_4px_15px_rgba(255,100,150,0.15)] flex items-center justify-center text-pink-500 border border-pink-100"
+            >
+              <Menu size={20} />
+            </motion.button>
+          </div>
+        </div>
+      </motion.nav>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[60] bg-white/95 backdrop-blur-md flex flex-col items-center justify-center"
+          >
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="absolute top-8 right-8 w-11 h-11 rounded-full bg-pink-50/80 flex items-center justify-center text-pink-500 border border-pink-100 hover:bg-pink-100 transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <div className="flex flex-col items-center gap-6">
+              {links.map((link) => (
+                <a
+                  key={link}
+                  href={`#${link.toLowerCase().replace(' ', '-')}`}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-xl tracking-[0.2em] text-pink-600 hover:text-pink-800 transition-colors font-sans uppercase font-medium"
+                >
+                  {link}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -692,7 +753,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       <section
         id="home"
-        className="relative h-[calc(100svh-44px)] min-h-[600px] flex items-center justify-center z-10 overflow-hidden"
+        className="relative h-[calc(100svh-44px)] min-h-[600px] flex items-center justify-center z-10 overflow-hidden pt-24 md:pt-0"
       >
         <div className="max-w-[1536px] mx-auto w-full h-full px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-[45%_55%] items-center gap-8 md:gap-12 lg:gap-50">
 
