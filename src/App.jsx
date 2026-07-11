@@ -54,22 +54,42 @@ function GlobalFloatingElements() {
 function CinematicParticles({ isEnding }) {
   const particles = useMemo(() => {
     const config = [];
-    // Bokeh
-    for (let i = 0; i < 20; i++) config.push({ type: 'bokeh', size: Math.random() * 40 + 20, x: Math.random() * 100, y: Math.random() * 100, delay: Math.random() * 10, duration: Math.random() * 5 + 5, opacity: Math.random() * 0.2 + 0.1 });
-    // Stars
-    for (let i = 0; i < 40; i++) config.push({ type: 'star', size: Math.random() * 4 + 2, x: Math.random() * 100, y: Math.random() * 100, delay: Math.random() * 5, duration: Math.random() * 3 + 2, opacity: Math.random() * 0.5 + 0.2 });
-    // Cherry Blossoms
-    for (let i = 0; i < 80; i++) config.push({ type: 'float', symbol: '🌸', size: Math.random() * 20 + 15, startX: Math.random() * 100, endX: Math.random() * 100, delay: Math.random() * 20, duration: Math.random() * 10 + 10, opacity: Math.random() * 0.4 + 0.2, rotStart: Math.random() * 360, rotEnd: Math.random() * 720 });
-    // Roses
-    for (let i = 0; i < 40; i++) config.push({ type: 'float', symbol: '🌹', size: Math.random() * 25 + 15, startX: Math.random() * 100, endX: Math.random() * 100, delay: Math.random() * 20, duration: Math.random() * 15 + 12, opacity: Math.random() * 0.3 + 0.2, rotStart: Math.random() * 360, rotEnd: Math.random() * 720 });
-    // Glitter
-    for (let i = 0; i < 150; i++) config.push({ type: 'float', symbol: '✨', size: Math.random() * 10 + 5, startX: Math.random() * 100, endX: Math.random() * 100, delay: Math.random() * 15, duration: Math.random() * 8 + 7, opacity: Math.random() * 0.6 + 0.2, rotStart: 0, rotEnd: 0 });
-    // Hearts
-    for (let i = 0; i < 60; i++) config.push({ type: 'float', symbol: '💖', size: Math.random() * 15 + 10, startX: Math.random() * 100, endX: Math.random() * 100, delay: Math.random() * 15, duration: Math.random() * 8 + 5, opacity: Math.random() * 0.5 + 0.3, rotStart: Math.random() * 360, rotEnd: Math.random() * 720 });
-    // Fairy dust
-    for (let i = 0; i < 80; i++) config.push({ type: 'float', symbol: '✦', size: Math.random() * 8 + 3, startX: Math.random() * 100, endX: Math.random() * 100, delay: Math.random() * 10, duration: Math.random() * 6 + 4, opacity: Math.random() * 0.7 + 0.2, rotStart: 0, rotEnd: 360 });
-    // Sparkles
-    for (let i = 0; i < 120; i++) config.push({ type: 'float', symbol: '✧', size: Math.random() * 12 + 4, startX: Math.random() * 100, endX: Math.random() * 100, delay: Math.random() * 10, duration: Math.random() * 7 + 3, opacity: Math.random() * 0.6 + 0.2, rotStart: 0, rotEnd: 180 });
+    
+    // Helper to generate optimized particles
+    const add = (type, symbol, count, sizeBase, sizeVar, durBase, durVar, delayMax) => {
+      for (let i = 0; i < count; i++) {
+        // Only keep ~35% of particles visible on mobile devices to save battery/performance
+        const isMobileVisible = i < Math.max(1, Math.floor(count * 0.4));
+        
+        config.push({
+          type,
+          symbol,
+          className: isMobileVisible ? '' : 'hidden md:block',
+          size: Math.random() * sizeVar + sizeBase,
+          x: Math.random() * 100, 
+          y: Math.random() * 100, 
+          startX: Math.random() * 100,
+          endX: Math.random() * 100,
+          delay: Math.random() * delayMax,
+          // Increase duration by 1.5x for slower, more graceful movement
+          duration: (Math.random() * durVar + durBase) * 1.5,
+          opacity: Math.random() * 0.4 + 0.2,
+          rotStart: Math.random() * 360,
+          rotEnd: Math.random() * 720
+        });
+      }
+    };
+
+    // Generates exactly 42 particles on desktop, 14 on mobile.
+    add('bokeh', '', 4, 20, 40, 5, 5, 10);
+    add('star', '', 5, 2, 4, 2, 3, 5);
+    add('float', '🌸', 7, 15, 20, 15, 10, 20);
+    add('float', '🌹', 4, 15, 25, 18, 15, 20); 
+    add('float', '✨', 7, 5, 10, 10, 8, 15);
+    add('float', '💖', 5, 10, 15, 10, 8, 15);
+    add('float', '✦', 5, 3, 8, 8, 6, 10);
+    add('float', '✧', 5, 4, 12, 8, 7, 10);
+
     return config;
   }, []);
 
@@ -78,17 +98,17 @@ function CinematicParticles({ isEnding }) {
       {particles.map((p, i) => {
         if (p.type === 'bokeh') {
           return (
-            <div key={i} className="particle-base anim-pulse rounded-full bg-white blur-md"
+            <div key={i} className={`particle-base anim-pulse rounded-full bg-white blur-md ${p.className}`}
               style={{ width: p.size, height: p.size, left: `${p.x}%`, top: `${p.y}%`, '--delay': `-${p.delay}s`, '--duration': `${p.duration}s`, '--max-opacity': p.opacity }} />
           );
         } else if (p.type === 'star') {
           return (
-            <div key={i} className="particle-base anim-pulse rounded-full bg-yellow-200 shadow-[0_0_8px_rgba(253,224,71,0.8)]"
+            <div key={i} className={`particle-base anim-pulse rounded-full bg-yellow-200 shadow-[0_0_8px_rgba(253,224,71,0.8)] ${p.className}`}
               style={{ width: p.size, height: p.size, left: `${p.x}%`, top: `${p.y}%`, '--delay': `-${p.delay}s`, '--duration': `${p.duration}s`, '--max-opacity': p.opacity }} />
           );
         } else {
           return (
-            <div key={i} className="particle-base anim-float drop-shadow-sm"
+            <div key={i} className={`particle-base anim-float drop-shadow-sm ${p.className}`}
               style={{ fontSize: p.size, left: 0, '--start-x': `${p.startX}vw`, '--end-x': `${p.endX}vw`, '--delay': `-${p.delay}s`, '--duration': `${p.duration}s`, '--max-opacity': p.opacity, '--start-rot': `${p.rotStart}deg`, '--end-rot': `${p.rotEnd}deg` }}>
               {p.symbol}
             </div>
