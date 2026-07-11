@@ -289,14 +289,7 @@ function InfiniteMarquee() {
 /* ═══════════════════════════════════════════════════════════════════════ */
 /*  6. AUDIO PLAYER (Bottom Right Sticky)                                */
 /* ═══════════════════════════════════════════════════════════════════════ */
-function AudioPlayer() {
-  const [isPlaying, setIsPlaying] = useState(() => {
-    return localStorage.getItem('musicPlaying') === 'true';
-  });
-  const [isMuted, setIsMuted] = useState(() => {
-    return localStorage.getItem('musicMuted') === 'true';
-  });
-  const audioRef = useRef(null);
+function AudioPlayer({ audioRef, isPlaying, setIsPlaying, isMuted, setIsMuted }) {
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -527,6 +520,35 @@ export default function App() {
   const [showMessage, setShowMessage] = useState(false);
   const [showEnding, setShowEnding] = useState(false);
   const [isBlowing, setIsBlowing] = useState(false);
+  
+  const [isPlaying, setIsPlaying] = useState(() => {
+    return localStorage.getItem('musicPlaying') === 'true';
+  });
+  const [isMuted, setIsMuted] = useState(() => {
+    return localStorage.getItem('musicMuted') === 'true';
+  });
+  const audioRef = useRef(null);
+
+  const handleOpenSurprise = async () => {
+    setShowSplash(false);
+    setTimeout(async () => {
+      try {
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.muted = false;
+          audioRef.current.volume = 0.5;
+          await audioRef.current.play();
+          setIsPlaying(true);
+          setIsMuted(false);
+          localStorage.setItem('musicPlaying', 'true');
+          localStorage.setItem('musicMuted', 'false');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }, 150);
+  };
+
   const heroImageRef = useRef(null);
 
   const blowCandles = () => {
@@ -650,7 +672,7 @@ export default function App() {
 
       {/* ─── Splash Screen ─── */}
       <AnimatePresence>
-        {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+        {showSplash && <SplashScreen onComplete={handleOpenSurprise} />}
       </AnimatePresence>
 
       {/* ─── Background Continuous Animations ─── */}
@@ -660,7 +682,7 @@ export default function App() {
       {!showSplash && <Navigation />}
 
       {/* ─── Audio Player ─── */}
-      {!showSplash && <AudioPlayer />}
+      {!showSplash && <AudioPlayer audioRef={audioRef} isPlaying={isPlaying} setIsPlaying={setIsPlaying} isMuted={isMuted} setIsMuted={setIsMuted} />}
 
       {/* ─── Surprise Modal ─── */}
       <SurpriseModal isOpen={showModal} onClose={() => setShowModal(false)} />
