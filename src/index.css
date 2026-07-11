@@ -485,3 +485,28 @@ html {
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.4);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════ */
+/*  CELEBRATE / GRAND FINALE SECTION STYLES                              */
+/* ═══════════════════════════════════════════════════════════════════════ */
+
+/* Soft neon glow pulse around hero image */
+@keyframes celebrate-glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.03);
+  }
+}
+
+.celebrate-glow-pulse {
+  animation: celebrate-glow-pulse 3s ease-in-out infinite;
+}
+
+/* Radial gradient utility (Tailwind v4 doesn't have built-in) */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops, rgba(244,114,182,0.2), transparent));
+}

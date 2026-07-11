@@ -524,44 +524,118 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [candlesBlown, setCandlesBlown] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [showEnding, setShowEnding] = useState(false);
+  const [isBlowing, setIsBlowing] = useState(false);
+  const heroImageRef = useRef(null);
 
   const blowCandles = () => {
+    if (isBlowing || candlesBlown) return;
+    setIsBlowing(true);
+
+    // Step 2: Reduce music volume
+    const audioEl = document.querySelector('audio');
+    if (audioEl) {
+      const fadeVolume = () => {
+        const target = 0.4;
+        const step = (audioEl.volume - target) / 20;
+        const interval = setInterval(() => {
+          if (audioEl.volume > target + 0.01) {
+            audioEl.volume = Math.max(target, audioEl.volume - step);
+          } else {
+            audioEl.volume = target;
+            clearInterval(interval);
+          }
+        }, 50);
+      };
+      fadeVolume();
+    }
+
+    // Step 3-5: Zoom, overlay, darken - handled via state
     setCandlesBlown(true);
 
-    // Massive confetti explosion
-    const duration = 5000;
-    const end = Date.now() + duration;
+    // Step 6-11: Particles, confetti, hearts
+    setTimeout(() => {
+      // Sparkle confetti
+      confetti({
+        particleCount: 80,
+        spread: 120,
+        startVelocity: 25,
+        origin: { y: 0.6 },
+        colors: ['#f472b6', '#fb7185', '#fda4af', '#fecdd3', '#fff1f2'],
+        ticks: 200,
+        gravity: 0.3,
+        zIndex: 100
+      });
+    }, 500);
 
-    (function frame() {
+    // Heart burst
+    setTimeout(() => {
       confetti({
-        particleCount: 10,
+        particleCount: 40,
+        spread: 360,
+        startVelocity: 30,
+        origin: { x: 0.5, y: 0.5 },
+        shapes: ['circle'],
+        colors: ['#ec4899', '#f43f5e', '#be185d', '#fda4af'],
+        scalar: 1.2,
+        ticks: 150,
+        zIndex: 100
+      });
+    }, 800);
+
+    // Slow confetti rain
+    const confettiEnd = Date.now() + 6000;
+    (function confettiFrame() {
+      confetti({
+        particleCount: 3,
         angle: 60,
-        spread: 80,
-        origin: { x: 0, y: 0.8 },
-        colors: ['#f472b6', '#fb7185', '#fda4af', '#fecdd3', '#fff1f2', '#fbbf24', '#a855f7']
+        spread: 55,
+        origin: { x: 0, y: 0 },
+        colors: ['#fbbf24', '#f472b6', '#a78bfa', '#fda4af', '#ffffff'],
+        ticks: 300,
+        gravity: 0.6,
+        zIndex: 100
       });
       confetti({
-        particleCount: 10,
+        particleCount: 3,
         angle: 120,
-        spread: 80,
-        origin: { x: 1, y: 0.8 },
-        colors: ['#f472b6', '#fb7185', '#fda4af', '#fecdd3', '#fff1f2', '#fbbf24', '#a855f7']
+        spread: 55,
+        origin: { x: 1, y: 0 },
+        colors: ['#fbbf24', '#f472b6', '#a78bfa', '#fda4af', '#ffffff'],
+        ticks: 300,
+        gravity: 0.6,
+        zIndex: 100
       });
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
+      if (Date.now() < confettiEnd) {
+        requestAnimationFrame(confettiFrame);
       }
     }());
 
+    // Golden particle burst
     setTimeout(() => {
       confetti({
-        particleCount: 250,
+        particleCount: 120,
         spread: 160,
-        startVelocity: 50,
+        startVelocity: 45,
         origin: { y: 0.5 },
-        colors: ['#f472b6', '#fb7185', '#fda4af', '#fecdd3', '#a855f7', '#fbbf24', '#ffffff'],
+        colors: ['#fbbf24', '#f59e0b', '#d97706', '#fde68a', '#fffbeb'],
+        scalar: 0.8,
+        ticks: 250,
         zIndex: 100
       });
-    }, 400);
+    }, 1200);
+
+    // Step 12: Show message card after 2s
+    setTimeout(() => {
+      setShowMessage(true);
+    }, 2000);
+
+    // Show ending after message (5s after message appears)
+    setTimeout(() => {
+      setShowMessage(false);
+      setTimeout(() => setShowEnding(true), 600);
+    }, 7000);
   };
 
   const qualities = [
@@ -1456,92 +1530,586 @@ export default function App() {
       </section>
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/*  CAKE FINALE                                                   */}
+      {/*  THE GRAND FINALE — CELEBRATE                                   */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="celebrate" className="relative z-10 py-28 md:py-36 px-6 text-center">
-        <h2 className="text-4xl md:text-6xl font-serif font-bold text-pink-800 mb-3 drop-shadow-sm">
-          The Grand Finale
-        </h2>
-        <p className="text-pink-500 font-cursive text-2xl md:text-3xl mb-16 drop-shadow-sm">
-          Make a wish, close your eyes...
-        </p>
+      <section
+        id="celebrate"
+        className="relative z-10 h-screen overflow-hidden"
+        style={{ height: '100vh', maxHeight: '100vh' }}
+      >
+        {/* ── Background Layer ── */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Soft blush pink gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white via-pink-50/60 to-rose-50/80" />
+          {/* Subtle grid texture */}
+          <div className="absolute inset-0 grid-pattern opacity-30" />
+          {/* Soft pink light rays */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-pink-200/20 via-transparent to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-[400px] h-[600px] bg-gradient-to-b from-pink-100/15 to-transparent rotate-12 blur-2xl" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[600px] bg-gradient-to-t from-rose-100/15 to-transparent -rotate-12 blur-2xl" />
 
-        <motion.div
-          className="text-8xl md:text-[10rem] mb-10 drop-shadow-xl"
-          animate={
-            candlesBlown
-              ? { rotate: [0, 5, -5, 0], scale: [1, 1.1, 1] }
-              : { y: [0, -10, 0] }
-          }
-          transition={{ repeat: Infinity, duration: candlesBlown ? 0.5 : 2 }}
-        >
-          🎂
-        </motion.div>
+          {/* Large cherry blossom branches - Top Left */}
+          <div className="absolute -top-4 -left-4 text-6xl md:text-7xl opacity-15 rotate-[30deg] select-none">🌸</div>
+          <div className="absolute top-12 left-8 text-4xl md:text-5xl opacity-10 rotate-[15deg] select-none">🌸</div>
+          <div className="absolute top-4 left-20 text-3xl opacity-8 rotate-[-10deg] select-none">🌺</div>
 
-        {!candlesBlown && (
-          <motion.div
-            className="flex justify-center gap-5 mb-12 text-3xl md:text-4xl"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-          >
-            🕯️🕯️🕯️🕯️🕯️
-          </motion.div>
-        )}
+          {/* Large cherry blossom branches - Bottom Right */}
+          <div className="absolute -bottom-4 -right-4 text-6xl md:text-7xl opacity-15 rotate-[-30deg] select-none">🌸</div>
+          <div className="absolute bottom-16 right-12 text-4xl md:text-5xl opacity-10 rotate-[-15deg] select-none">🌸</div>
+          <div className="absolute bottom-8 right-28 text-3xl opacity-8 rotate-[10deg] select-none">🌺</div>
 
-        {candlesBlown && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mb-12 text-3xl md:text-4xl"
-          >
-            ✨🎉🥳💖🎊✨
-          </motion.div>
-        )}
+          {/* Floating cherry blossom petals */}
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={`cel-petal-${i}`}
+              className="absolute text-pink-300/40 select-none"
+              style={{
+                top: `${(i * 8 + 5) % 100}%`,
+                left: `${(i * 11 + 3) % 100}%`,
+                fontSize: `${12 + (i % 4) * 4}px`,
+              }}
+              animate={{
+                y: [0, -30 - i * 5, 0],
+                x: [0, (i % 2 === 0 ? 15 : -15), 0],
+                rotate: [0, 180, 360],
+                opacity: [0.2, 0.5, 0.2],
+              }}
+              transition={{ duration: 6 + i * 0.8, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              {i % 3 === 0 ? '🌸' : i % 3 === 1 ? '🌺' : '💮'}
+            </motion.div>
+          ))}
 
-        <motion.button
-          onClick={!candlesBlown ? blowCandles : undefined}
-          whileHover={!candlesBlown ? { scale: 1.05 } : {}}
-          whileTap={!candlesBlown ? { scale: 0.95 } : {}}
-          className={`px-12 py-5 rounded-full font-sans text-sm md:text-base font-bold tracking-widest uppercase text-white shadow-xl cursor-pointer transition-all duration-500 border-2 ${candlesBlown
-            ? 'bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400 shadow-amber-300/40 border-transparent'
-            : 'bg-pink-500 hover:bg-pink-600 shadow-pink-300/50 border-pink-400'
-            }`}
-        >
-          {candlesBlown ? (
-            <span className="flex items-center gap-2">
-              <Sparkles size={20} />
-              WISH MADE! THE MAGIC IS REAL
-              <Sparkles size={20} />
-            </span>
-          ) : (
-            <span className="flex items-center gap-2">
-              <Flame size={20} />
-              BLOW OUT THE CANDLES!
-            </span>
+          {/* Small glowing stars */}
+          {[...Array(18)].map((_, i) => (
+            <motion.div
+              key={`cel-star-${i}`}
+              className="absolute text-amber-400/50 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)] select-none"
+              style={{
+                top: `${(i * 6 + 2) % 95}%`,
+                left: `${(i * 7 + 5) % 95}%`,
+                fontSize: `${8 + (i % 3) * 3}px`,
+              }}
+              animate={{ opacity: [0.1, 0.8, 0.1], scale: [0.8, 1.2, 0.8] }}
+              transition={{ duration: 2 + (i % 4), repeat: Infinity, delay: i * 0.3 }}
+            >
+              ✦
+            </motion.div>
+          ))}
+
+          {/* Tiny sparkles */}
+          {[...Array(10)].map((_, i) => (
+            <motion.div
+              key={`cel-sparkle-${i}`}
+              className="absolute w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)]"
+              style={{
+                top: `${(i * 10 + 7) % 90}%`,
+                left: `${(i * 13 + 8) % 90}%`,
+              }}
+              animate={{ opacity: [0, 1, 0], scale: [0.5, 1.5, 0.5] }}
+              transition={{ duration: 1.5 + (i % 3), repeat: Infinity, delay: i * 0.5 }}
+            />
+          ))}
+
+          {/* Soft golden particles */}
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`cel-gold-${i}`}
+              className="absolute w-1.5 h-1.5 rounded-full bg-amber-300/40 shadow-[0_0_10px_rgba(251,191,36,0.6)]"
+              style={{
+                top: `${(i * 12 + 10) % 85}%`,
+                left: `${(i * 14 + 6) % 85}%`,
+              }}
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0.2, 0.7, 0.2],
+              }}
+              transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.6 }}
+            />
+          ))}
+        </div>
+
+        {/* ── Darkening overlay when candles blown ── */}
+        <AnimatePresence>
+          {candlesBlown && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 bg-black/20 z-[5] pointer-events-none"
+              transition={{ duration: 1.5 }}
+            />
           )}
-        </motion.button>
+        </AnimatePresence>
 
-        {candlesBlown && (
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="mt-12 text-pink-500/80 font-cursive text-3xl"
+        {/* ── Pink light expansion when candles blown ── */}
+        <AnimatePresence>
+          {candlesBlown && (
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 4, opacity: 0.15 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-pink-400 z-[6] pointer-events-none"
+              transition={{ duration: 2.5, ease: 'easeOut' }}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* ── Rose petals when blown ── */}
+        <AnimatePresence>
+          {candlesBlown && [...Array(20)].map((_, i) => (
+            <motion.div
+              key={`blown-petal-${i}`}
+              className="absolute text-pink-400/60 z-[7] pointer-events-none select-none"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: '-5%',
+                fontSize: `${14 + Math.random() * 12}px`,
+              }}
+              initial={{ y: -20, opacity: 0, rotate: 0 }}
+              animate={{
+                y: '110vh',
+                opacity: [0, 0.8, 0.6, 0],
+                rotate: 360 * (Math.random() > 0.5 ? 1 : -1),
+                x: [0, (Math.random() - 0.5) * 200],
+              }}
+              transition={{
+                duration: 5 + Math.random() * 4,
+                delay: Math.random() * 2,
+                ease: 'linear',
+              }}
+            >
+              {i % 4 === 0 ? '🌹' : i % 4 === 1 ? '🌸' : i % 4 === 2 ? '💮' : '🪷'}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* ── Main Content ── */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8 pt-16">
+
+          {/* ── TITLE ── */}
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="text-center mb-3 md:mb-4"
           >
-            "You are the wish that already came true" 💕
-          </motion.p>
-        )}
-      </FadeSection>
+            <h2
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight drop-shadow-sm"
+              style={{
+                fontFamily: '"Playfair Display", serif',
+                background: 'linear-gradient(135deg, #9f1239 0%, #e11d48 40%, #fb7185 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              ✨ The Grand Finale ♡
+            </h2>
+          </motion.div>
 
-      {/* ═══════════ FOOTER ═══════════ */}
-      <footer className="relative z-10 py-12 text-center border-t border-pink-100">
-        <p className="text-pink-400/60 font-sans text-[10px] tracking-[0.3em] uppercase">
-          Made with 💕 just for you
-        </p>
-        <p className="text-pink-400 font-cursive text-xl mt-3">
-          Forever yours, Sajith
-        </p>
-      </footer>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-xl sm:text-2xl md:text-3xl mb-1 md:mb-2 drop-shadow-sm"
+            style={{
+              fontFamily: '"Great Vibes", cursive',
+              color: '#e11d48',
+            }}
+          >
+            Make a wish, close your eyes...
+          </motion.p>
+
+          {/* Small decorative divider */}
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="champagne-divider w-24 md:w-32 mb-3 md:mb-5"
+          />
+
+          {/* ── MAIN HERO AREA WITH DECORATIONS ── */}
+          <div className="relative flex items-center justify-center w-full max-w-[900px] mb-3 md:mb-5">
+
+            {/* ── LEFT DECORATION: Gift Box ── */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="hidden lg:block absolute -left-8 xl:left-0 bottom-[15%]"
+            >
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative"
+              >
+                {/* Gift box body */}
+                <div className="w-16 h-14 rounded-lg bg-white shadow-[0_8px_25px_rgba(236,72,153,0.2)] border border-pink-100 relative overflow-hidden">
+                  {/* Pink ribbon vertical */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-full bg-gradient-to-b from-pink-400 to-rose-400" />
+                  {/* Pink ribbon horizontal */}
+                  <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-3 bg-gradient-to-r from-pink-400 to-rose-400" />
+                </div>
+                {/* Lid */}
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-[72px] h-5 rounded-t-lg bg-white shadow-md border border-pink-100 border-b-0">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-full bg-gradient-to-b from-pink-400 to-rose-400" />
+                </div>
+                {/* Bow */}
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-xl">🎀</div>
+                {/* Small flower petals */}
+                <div className="absolute -bottom-2 -left-2 text-sm opacity-60">🌸</div>
+                <div className="absolute -bottom-1 right-0 text-xs opacity-50">🌺</div>
+                {/* Tiny golden stars */}
+                <motion.div
+                  className="absolute -top-8 -right-3 text-amber-400 text-xs"
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >✦</motion.div>
+                <motion.div
+                  className="absolute -bottom-4 -left-4 text-amber-400 text-[10px]"
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+                >✦</motion.div>
+              </motion.div>
+            </motion.div>
+
+            {/* ── RIGHT DECORATION: Heart Balloon ── */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="hidden lg:block absolute -right-8 xl:right-0 top-[10%]"
+            >
+              <motion.div
+                animate={{ y: [0, -12, 0], rotate: [0, 3, -3, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative flex flex-col items-center"
+              >
+                {/* Balloon */}
+                <div className="text-5xl drop-shadow-lg filter">🩷</div>
+                {/* Balloon string */}
+                <div className="w-px h-12 bg-gradient-to-b from-pink-300 to-transparent" />
+                {/* Glowing heart icon */}
+                <motion.div
+                  className="absolute -bottom-2 -left-4 text-pink-400 text-sm"
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <Heart size={12} className="fill-pink-400" />
+                </motion.div>
+                {/* Tiny particles */}
+                <motion.div
+                  className="absolute top-2 -right-3 w-1 h-1 rounded-full bg-pink-300"
+                  animate={{ opacity: [0, 1, 0], y: [0, -8, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <motion.div
+                  className="absolute top-6 right-2 w-0.5 h-0.5 rounded-full bg-rose-300"
+                  animate={{ opacity: [0, 1, 0], y: [0, -6, 0] }}
+                  transition={{ duration: 1.8, repeat: Infinity, delay: 0.3 }}
+                />
+              </motion.div>
+            </motion.div>
+
+            {/* ── HERO IMAGE ── */}
+            <motion.div
+              ref={heroImageRef}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+              animate={candlesBlown ? { scale: 1.08 } : {}}
+              className="relative"
+              style={{ transition: 'transform 2s cubic-bezier(0.25, 0.8, 0.25, 1)' }}
+            >
+              {/* Soft pink neon glow */}
+              <div className="absolute -inset-4 md:-inset-6 rounded-[42px] md:rounded-[48px] bg-gradient-to-br from-pink-300/30 via-rose-300/25 to-pink-200/30 blur-xl celebrate-glow-pulse pointer-events-none" />
+
+              {/* Image frame */}
+              <div
+                className="relative rounded-[28px] md:rounded-[36px] overflow-hidden border-[3px] md:border-4 border-white/95"
+                style={{
+                  width: 'min(760px, 85vw)',
+                  aspectRatio: '760 / 480',
+                  boxShadow: '0 20px 50px rgba(236,72,153,0.2), 0 8px 20px rgba(0,0,0,0.06), 0 0 40px rgba(251,113,133,0.15), inset 0 1px 2px rgba(255,255,255,0.6)',
+                }}
+              >
+                <img
+                  src="/11.png"
+                  alt="Birthday Celebration"
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Candle fade overlay */}
+                <AnimatePresence>
+                  {candlesBlown && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.35 }}
+                      transition={{ duration: 1.5 }}
+                      className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none"
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* Glass highlight */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-white/20 to-transparent opacity-60 pointer-events-none" />
+              </div>
+
+              {/* Tiny flowers at frame corners */}
+              <div className="absolute -top-3 -left-3 text-lg md:text-xl drop-shadow-md">🌸</div>
+              <div className="absolute -top-3 -right-3 text-lg md:text-xl drop-shadow-md">🌺</div>
+              <div className="absolute -bottom-3 -left-3 text-lg md:text-xl drop-shadow-md">🌺</div>
+              <div className="absolute -bottom-3 -right-3 text-lg md:text-xl drop-shadow-md">🌸</div>
+
+              {/* Tiny sparkles around border */}
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <motion.div
+                  key={`frame-sparkle-${i}`}
+                  className="absolute w-1 h-1 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,1)]"
+                  style={{
+                    top: `${['-2%', '30%', '60%', '95%', '50%', '10%'][i]}`,
+                    left: `${['30%', '98%', '-1%', '70%', '-1%', '98%'][i]}`,
+                  }}
+                  animate={{ opacity: [0, 1, 0], scale: [0.5, 1.5, 0.5] }}
+                  transition={{ duration: 1.5 + i * 0.3, repeat: Infinity, delay: i * 0.4 }}
+                />
+              ))}
+
+              {/* Cherry blossoms around hero */}
+              <motion.div
+                className="absolute -top-6 left-[20%] text-2xl opacity-40"
+                animate={{ y: [0, -5, 0], rotate: [0, 10, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              >🌸</motion.div>
+              <motion.div
+                className="absolute -bottom-6 right-[25%] text-xl opacity-35"
+                animate={{ y: [0, 5, 0], rotate: [0, -10, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
+              >🌹</motion.div>
+              <motion.div
+                className="absolute top-[40%] -left-6 text-lg opacity-30"
+                animate={{ x: [0, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >💮</motion.div>
+              <motion.div
+                className="absolute top-[30%] -right-6 text-lg opacity-30"
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 3.2, repeat: Infinity, delay: 0.8 }}
+              >🌸</motion.div>
+            </motion.div>
+          </div>
+
+          {/* ── BUTTON ── */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            onClick={blowCandles}
+            disabled={isBlowing || candlesBlown}
+            whileHover={!candlesBlown && !isBlowing ? { scale: 1.03, y: -3 } : {}}
+            whileTap={!candlesBlown && !isBlowing ? { scale: 0.97 } : {}}
+            className="relative group overflow-hidden cursor-pointer disabled:cursor-default"
+            style={{
+              padding: '14px 36px',
+              borderRadius: '999px',
+              background: candlesBlown
+                ? 'linear-gradient(135deg, #a78bfa, #ec4899, #f472b6)'
+                : 'linear-gradient(135deg, #ec4899, #f43f5e, #e11d48)',
+              boxShadow: candlesBlown
+                ? '0 12px 35px rgba(168,85,247,0.3), 0 0 25px rgba(236,72,153,0.2)'
+                : '0 12px 35px rgba(236,72,153,0.4), 0 0 25px rgba(236,72,153,0.2)',
+              fontFamily: '"Poppins", sans-serif',
+              fontWeight: 600,
+              fontSize: 'clamp(13px, 2vw, 16px)',
+              color: 'white',
+              letterSpacing: '0.05em',
+              border: 'none',
+              transition: 'all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)',
+            }}
+          >
+            {/* Glass effect overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-full pointer-events-none" />
+            {/* Shine sweep */}
+            {!candlesBlown && <div className="absolute inset-0 hero-btn-shine pointer-events-none" />}
+            <span className="relative z-10 flex items-center gap-2">
+              {candlesBlown ? (
+                <><Sparkles size={18} /> ✨ Wish Made! <Sparkles size={18} /></>
+              ) : (
+                <>🔥 Blow Out The Candles!</>
+              )}
+            </span>
+          </motion.button>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════ */}
+        {/* FINAL MESSAGE CARD (Glassmorphism)                     */}
+        {/* ═══════════════════════════════════════════════════════ */}
+        <AnimatePresence>
+          {showMessage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="fixed inset-0 z-[80] flex items-center justify-center bg-black/30 backdrop-blur-sm px-4"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                transition={{ duration: 0.8, type: 'spring', stiffness: 120, damping: 20 }}
+                className="relative max-w-xl w-full rounded-[2rem] p-6 sm:p-8 md:p-10 text-center overflow-hidden"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.75)',
+                  backdropFilter: 'blur(24px) saturate(1.5)',
+                  WebkitBackdropFilter: 'blur(24px) saturate(1.5)',
+                  border: '1px solid rgba(255, 255, 255, 0.6)',
+                  boxShadow: '0 25px 60px rgba(236,72,153,0.2), 0 0 40px rgba(251,113,133,0.15), inset 0 1px 0 rgba(255,255,255,0.8)',
+                }}
+              >
+                {/* Glow behind card */}
+                <div className="absolute -inset-10 bg-pink-200/20 blur-3xl rounded-full pointer-events-none" />
+
+                <motion.h3
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.6 }}
+                  className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 drop-shadow-sm"
+                  style={{ fontFamily: '"Playfair Display", serif', color: '#9f1239' }}
+                >
+                  ❤️ Happy Birthday ❤️
+                </motion.h3>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  className="text-xl sm:text-2xl mb-4"
+                  style={{ fontFamily: '"Great Vibes", cursive', color: '#e11d48' }}
+                >
+                  My Beautiful Princess
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.8 }}
+                  className="space-y-3 text-sm sm:text-base leading-relaxed max-h-[50vh] overflow-y-auto hide-scrollbar"
+                  style={{ fontFamily: '"Cormorant Garamond", serif', color: '#4a1d34' }}
+                >
+                  <p>Today is not only your birthday...</p>
+                  <p>It is the day the world received someone truly extraordinary.</p>
+                  <p>
+                    Thank you for filling my life with love,<br />
+                    laughter,<br />
+                    kindness,<br />
+                    and endless beautiful memories.
+                  </p>
+                  <p>
+                    May every dream in your heart come true.<br />
+                    May your smile shine forever.<br />
+                    May happiness always choose you.
+                  </p>
+                  <p>No matter where life takes us,</p>
+                  <p>
+                    I promise to protect your smile,<br />
+                    support your dreams,<br />
+                    celebrate every success,<br />
+                    and love you a little more every single day.
+                  </p>
+                  <p className="text-base sm:text-lg font-semibold pt-2" style={{ fontFamily: '"Playfair Display", serif', color: '#9f1239' }}>
+                    Happy Birthday,<br />
+                    My Forever Love.
+                  </p>
+                  <p className="text-lg sm:text-xl font-bold" style={{ color: '#e11d48' }}>
+                    I Love You ❤️
+                  </p>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ═══════════════════════════════════════════════════════ */}
+        {/* ENDING SCREEN                                          */}
+        {/* ═══════════════════════════════════════════════════════ */}
+        <AnimatePresence>
+          {showEnding && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="fixed inset-0 z-[90] flex flex-col items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-50 px-4"
+              transition={{ duration: 1.2 }}
+            >
+              {/* Sparkles background */}
+              {[...Array(15)].map((_, i) => (
+                <motion.div
+                  key={`end-sparkle-${i}`}
+                  className="absolute text-amber-400/40"
+                  style={{
+                    top: `${(i * 7 + 5) % 95}%`,
+                    left: `${(i * 9 + 3) % 95}%`,
+                    fontSize: `${8 + (i % 3) * 4}px`,
+                  }}
+                  animate={{ opacity: [0.1, 0.7, 0.1], scale: [0.8, 1.2, 0.8] }}
+                  transition={{ duration: 2 + (i % 3), repeat: Infinity, delay: i * 0.3 }}
+                >
+                  ✦
+                </motion.div>
+              ))}
+
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 1 }}
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-6 drop-shadow-sm"
+                style={{
+                  fontFamily: '"Playfair Display", serif',
+                  background: 'linear-gradient(135deg, #9f1239, #e11d48, #fb7185)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                ✨ Forever Begins... ✨
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="text-pink-600/70 text-sm md:text-base tracking-wide mb-6"
+                style={{ fontFamily: '"Cormorant Garamond", serif' }}
+              >
+                Made with all my love
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.5, duration: 0.8 }}
+                className="text-4xl md:text-5xl -rotate-3 drop-shadow-sm"
+                style={{ fontFamily: '"Allura", cursive', color: '#9f1239' }}
+              >
+                — Sajith ♡
+              </motion.p>
+
+              {/* Slow heart pulse */}
+              <motion.div
+                className="mt-8"
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Heart size={28} className="text-pink-500 fill-pink-500 drop-shadow-md" />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
     </div>
   );
 }
