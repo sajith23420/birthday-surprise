@@ -510,3 +510,48 @@ html {
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops, rgba(244,114,182,0.2), transparent));
 }
+
+/* ═══════════════════════════════════════════════════════════════════════ */
+/*  CINEMATIC PARTICLES                                                  */
+/* ═══════════════════════════════════════════════════════════════════════ */
+
+@keyframes particle-float-up {
+  0% { transform: translate3d(var(--start-x), 110vh, 0) rotate(var(--start-rot)); opacity: 0; }
+  10% { opacity: var(--max-opacity); }
+  90% { opacity: var(--max-opacity); }
+  100% { transform: translate3d(var(--end-x), -10vh, 0) rotate(var(--end-rot)); opacity: 0; }
+}
+
+@keyframes particle-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(var(--drift-x), 0, 0) rotate(var(--drift-rot)); }
+}
+
+@keyframes particle-pulse {
+  0%, 100% { opacity: calc(var(--max-opacity) * 0.3); transform: scale(0.8); }
+  50% { opacity: var(--max-opacity); transform: scale(1.2); }
+}
+
+.particle-base {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.anim-float {
+  animation: particle-float-up var(--duration) linear infinite;
+  animation-delay: var(--delay);
+}
+
+.anim-pulse {
+  animation: particle-pulse var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+/* Ending Slowdown Modifier */
+.ending-slowdown .anim-float {
+  animation-duration: calc(var(--duration) * 3) !important;
+}
+.ending-slowdown .anim-pulse {
+  animation-duration: calc(var(--duration) * 2) !important;
+}
