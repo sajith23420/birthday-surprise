@@ -775,9 +775,9 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       <section
         id="home"
-        className="relative h-[calc(100svh-44px)] min-h-[600px] flex items-center justify-center z-10 overflow-hidden pt-24 md:pt-0"
+        className="relative h-[calc(100svh-44px)] min-h-[600px] flex items-center justify-center z-10 overflow-hidden overflow-x-hidden max-w-full pt-24 md:pt-0"
       >
-        <div className="max-w-[1536px] mx-auto w-full h-full px-6 md:px-10 lg:px-16 grid grid-cols-1 lg:grid-cols-[45%_55%] items-center gap-8 md:gap-12 lg:gap-50">
+        <div className="max-w-[1400px] mx-auto w-full h-full px-6 lg:px-10 xl:px-12 grid grid-cols-1 lg:grid-cols-[45%_55%] items-center gap-8 md:gap-12 lg:gap-20">
 
           {/* ═══════ LEFT COLUMN — Content ═══════ */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left z-20 order-2 lg:order-1 w-full max-w-[620px] mx-auto lg:mx-0 lg:pl-20">
@@ -878,7 +878,7 @@ export default function App() {
             initial={{ opacity: 0, x: 60, rotate: 0 }}
             animate={{ opacity: 1, x: 0, rotate: 4 }}
             transition={{ delay: 0.8, duration: 1, type: 'spring', bounce: 0.15 }}
-            className="relative z-10 order-1 lg:order-2 w-[85%] max-w-[320px] md:max-w-[420px] lg:max-w-[480px] mx-auto lg:mx-0 lg:-translate-x-10 aspect-[3/4]"
+            className="relative z-10 order-1 lg:order-2 w-[85%] max-w-[90vw] sm:max-w-[400px] md:max-w-[480px] lg:max-w-[560px] mx-auto lg:mx-0 lg:-translate-x-10 aspect-[3/4]"
           >
             {/* Ambient glow behind image */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-gradient-to-br from-pink-200/50 via-pink-300/40 to-rose-200/50 rounded-[60px] blur-[50px] ambient-glow pointer-events-none z-0" />
@@ -959,7 +959,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  TWO SOULS, ONE JOURNEY                                        */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="journey" className="relative z-10 py-24 md:py-32 px-6 overflow-hidden">
+      <FadeSection id="journey" className="relative z-10 py-24 md:py-32 px-6 overflow-hidden overflow-x-hidden max-w-full">
         {/* Soft radial glows and background lighting */}
         <div className="absolute top-1/2 left-[10%] w-[500px] h-[500px] bg-pink-300/15 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
         <div className="absolute top-1/2 right-[10%] w-[500px] h-[500px] bg-rose-300/15 rounded-full blur-[120px] pointer-events-none -translate-y-1/2" />
@@ -1080,7 +1080,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  OUR UNIVERSE (ORBITING)                                       */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="universe" className="relative z-10 min-h-[100svh] lg:min-h-[100vh] flex flex-col justify-center py-16 lg:py-0 px-6 overflow-hidden">
+      <FadeSection id="universe" className="relative z-10 min-h-[100svh] lg:min-h-[100vh] flex flex-col justify-center py-16 lg:py-0 px-6 overflow-hidden overflow-x-hidden max-w-full">
         <div className="flex flex-col items-center justify-center max-w-7xl mx-auto w-full relative">
 
           {/* Header Area */}
@@ -1165,7 +1165,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  CHERISHED MOMENTS GALLERY                                     */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <FadeSection id="moments" className="relative z-10 min-h-[100svh] lg:h-screen lg:max-h-screen flex flex-col justify-center py-16 lg:py-0 px-6 overflow-x-hidden lg:overflow-hidden">
+      <FadeSection id="moments" className="relative z-10 min-h-[100svh] lg:h-screen lg:max-h-screen flex flex-col justify-center py-16 lg:py-0 px-6 overflow-x-hidden lg:overflow-hidden max-w-full">
 
         <div className="flex-1 flex flex-col justify-center max-w-[1400px] mx-auto w-full h-full relative">
 
@@ -1296,7 +1296,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  LETTER SECTION                                                */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="letter" className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden py-16 lg:py-24">
+      <section id="letter" className="relative min-h-[100svh] w-full max-w-full flex flex-col items-center justify-center overflow-hidden overflow-x-hidden py-16 lg:py-24">
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
         `}</style>
@@ -1514,7 +1514,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/*  WHY YOU ARE EXTRAORDINARY                                     */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <section id="why-you" className="relative min-h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden py-16 lg:py-20 px-4">
+      <section id="why-you" className="relative min-h-[100svh] w-full max-w-full flex flex-col items-center justify-center overflow-hidden overflow-x-hidden py-16 lg:py-20 px-4">
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
         `}</style>
@@ -1639,7 +1639,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       <section
         id="celebrate"
-        className="relative z-10 min-h-screen pb-40"
+        className="relative z-10 min-h-screen pb-40 max-w-full overflow-x-hidden"
       >
         {/* ── Background Layer ── */}
         <div className="absolute inset-0 pointer-events-none">

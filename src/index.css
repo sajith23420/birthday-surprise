@@ -8,7 +8,13 @@
   --font-cormorant: 'Cormorant Garamond', serif;
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling & Overflow fix */
+html, body, #root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 html {
   scroll-behavior: smooth;
 }
