@@ -164,7 +164,7 @@ function Navigation() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6 }}
-        className="fixed top-4 left-4 right-4 z-50 nav-premium-glass rounded-2xl"
+        className="fixed top-4 left-4 right-4 z-[120] nav-premium-glass rounded-2xl"
       >
         <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
           <motion.div whileHover={{ rotate: 20, scale: 1.1 }} className="text-pink-400">
@@ -729,7 +729,7 @@ export default function App() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-white via-pink-50/30 to-pink-50 font-sans overflow-x-hidden grid-pattern">
+    <div className="relative min-h-screen bg-gradient-to-b from-white via-pink-50/30 to-pink-50 font-sans grid-pattern">
 
       {/* ─── Splash Screen ─── */}
       <AnimatePresence>
@@ -1617,8 +1617,7 @@ export default function App() {
       {/* ════════════════════════════════════════════════════════════════ */}
       <section
         id="celebrate"
-        className="relative z-10 h-screen overflow-hidden"
-        style={{ height: '100vh', maxHeight: '100vh' }}
+        className="relative z-10 min-h-screen pb-40"
       >
         {/* ── Background Layer ── */}
         <div className="absolute inset-0 pointer-events-none">
@@ -1766,7 +1765,7 @@ export default function App() {
         </AnimatePresence>
 
         {/* ── Main Content ── */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8 pt-16">
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 md:px-8 pt-24 md:pt-20 pb-40">
 
           {/* ── TITLE ── */}
           <motion.div
@@ -1813,7 +1812,7 @@ export default function App() {
           />
 
           {/* ── MAIN HERO AREA WITH DECORATIONS ── */}
-          <div className="relative flex items-center justify-center w-full max-w-[900px] mb-3 md:mb-5">
+          <div className="relative flex items-center justify-center w-full max-w-[760px] mb-8 md:mb-12">
 
             {/* ── LEFT DECORATION: Gift Box ── */}
             <motion.div
@@ -1915,8 +1914,8 @@ export default function App() {
               <div
                 className="relative rounded-[28px] md:rounded-[36px] overflow-hidden border-[3px] md:border-4 border-white/95"
                 style={{
-                  width: 'min(760px, 85vw)',
-                  aspectRatio: '760 / 480',
+                  width: 'min(680px, 80vw)',
+                  aspectRatio: '16 / 9',
                   boxShadow: '0 20px 50px rgba(236,72,153,0.2), 0 8px 20px rgba(0,0,0,0.06), 0 0 40px rgba(251,113,133,0.15), inset 0 1px 2px rgba(255,255,255,0.6)',
                 }}
               >
@@ -2126,9 +2125,17 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="fixed inset-0 z-[90] flex flex-col items-center justify-center bg-gradient-to-br from-pink-50 via-white to-rose-50 px-4"
+              className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/60 backdrop-blur-md px-4 pointer-events-none"
               transition={{ duration: 1.2 }}
+              onAnimationComplete={() => { document.body.style.overflow = 'auto'; }}
             >
+              {/* Close Button */}
+              <button 
+                onClick={() => setShowEnding(false)}
+                className="absolute top-24 right-6 md:right-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/80 backdrop-blur-md text-pink-500 shadow-[0_4px_15px_rgba(236,72,153,0.15)] hover:bg-pink-50 transition-colors z-[110] pointer-events-auto cursor-pointer border border-pink-100"
+              >
+                <X size={20} />
+              </button>
               {/* Sparkles background */}
               {[...Array(15)].map((_, i) => (
                 <motion.div
